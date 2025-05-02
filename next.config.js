@@ -9,9 +9,6 @@ module.exports = {
       'avatars.githubusercontent.com',
     ],
   },
-  future: {
-    webpack5: true
-  },
   webpack: (config) => {
     // load worker files as a urls with `file-loader`
     config.module.rules.unshift({

@@ -1,107 +1,76 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import posts from '@/fixtures/projects'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const Projects: NextPage = () => {
   return (
-    <div className="">
+    <div className="container mx-auto py-6">
       <Head>
         <title>hugocodes - projects</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex flex-col items-center text-center">
-        <div className="bg-slate-50- relative ">
-          {/* <div className="absolute inset-0">
-            <div className="h-1/3 bg-slate-700 sm:h-2/3" />
-          </div> */}
-          <div className="relative mx-auto max-w-7xl">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold tracking-tight text-slate-400 sm:text-4xl">
-                Projects
-              </h2>
-              <p className="mx-auto mt-3 max-w-2xl text-xl text-slate-500 sm:mt-4">
-                WIP...
-              </p>
+      
+      <div className="mb-12 text-center">
+        <h1 className="mb-4 text-4xl font-bold tracking-tight text-slate-100">Projects</h1>
+        <p className="mx-auto max-w-2xl text-lg text-slate-400">
+          A collection of my recent work and side projects
+        </p>
+      </div>
+      
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <Card key={post.title} className="overflow-hidden border-slate-700 bg-slate-800">
+            <div className="aspect-video w-full overflow-hidden">
+              <img
+                src={post.imageUrl}
+                alt={post.title}
+                className="h-full w-full object-cover transition-all hover:scale-105"
+              />
             </div>
-            <div className="mx-auto grid max-w-lg gap-5 lg:max-w-none lg:grid-cols-3">
-              {posts.map((post) => (
-                <div
-                  key={post.title}
-                  className="flex   flex-col  overflow-hidden  shadow-lg shadow-slate-800"
+            
+            <CardHeader className="p-4">
+              <div className="flex items-center justify-between">
+                <a
+                  href={post.category.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-amber-400 hover:underline"
                 >
-                  <div className="flex-shrink-0">
-                    <img
-                      className="h-48 w-full object-cover"
-                      src={post.imageUrl}
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col justify-between bg-slate-700 p-6">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-amber-400">
-                        <a
-                          href={post.category.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline"
-                        >
-                          {post.category.name}
-                        </a>
-                      </p>
-                      <a
-                        href={post.href}
-                        className="mt-2 block"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <p className="text-xl font-semibold text-slate-400">
-                          {post.title}
-                        </p>
-                        <p className="mt-3 text-base text-slate-500">
-                          {post.description}
-                        </p>
-                      </a>
-                    </div>
-                    <div className="mt-6 flex items-center">
-                      <div className="flex-shrink-0">
-                        <a
-                          href={post.author.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <span className="sr-only">{post.author.name}</span>
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src={post.author.imageUrl}
-                            alt=""
-                          />
-                        </a>
-                      </div>
-                      <div className="ml-3">
-                        <p className="text-sm font-medium text-slate-400">
-                          <a
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={post.author.href}
-                            className="hover:underline"
-                          >
-                            {post.author.name}
-                          </a>
-                        </p>
-                        <div className="flex space-x-1 text-sm text-slate-500">
-                          <time dateTime={post.datetime}>{post.date}</time>
-                          <span aria-hidden="true">&middot;</span>
-                          <span>{post.readingTime} read</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {post.category.name}
+                </a>
+                <span className="text-xs text-slate-400">{post.date}</span>
+              </div>
+              <a
+                href={post.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block hover:underline"
+              >
+                <h3 className="text-xl font-semibold text-slate-100">{post.title}</h3>
+              </a>
+            </CardHeader>
+            
+            <CardContent className="p-4 pt-0">
+              <p className="text-slate-300">{post.description}</p>
+            </CardContent>
+            
+            <CardFooter className="border-t border-slate-700 p-4">
+              <div className="flex items-center">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={post.author.imageUrl} alt={post.author.name} />
+                  <AvatarFallback>{post.author.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-slate-200">{post.author.name}</p>
+                  <p className="text-xs text-slate-400">{post.readingTime} read</p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }

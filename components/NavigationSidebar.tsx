@@ -1,21 +1,15 @@
-import { Fragment, useState, ReactNode } from 'react'
-import type { AppProps } from 'next/app'
+import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { Dialog, Transition } from '@headlessui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { 
+  Home, 
+  FolderOpen, 
+  Menu, 
+  X 
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-import {
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuIcon,
-  UsersIcon,
-  XIcon,
-} from '@heroicons/react/outline'
-import { classNames } from '@/util/index'
 export type NavigationItem = {
   name: string
   href: string
@@ -23,87 +17,77 @@ export type NavigationItem = {
   icon: any
 }
 
-const transitionDelayClasses = [
-  'delay-150',
-  'delay-200',
-  'delay-300',
-  'delay-500',
-  'delay-700',
-  'delay-1000',
-]
 type Props = {
   navigation: NavigationItem[]
 }
-export default function NavigationSidebar(props: Props) {
-  const { navigation } = props
-  const [docked, setDocked] = useState(true)
+
+export default function NavigationSidebar({ navigation }: Props) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const icons = {
+    Home: Home,
+    FolderIcon: FolderOpen
+  }
 
   return (
-    <div
-      className={classNames(
-        'flex h-full  flex-1 flex-col bg-slate-800 p-2 md:divide-y md:divide-slate-700  '
-      )}
-    >
-      <div className={classNames('sticky top-0 z-10 hidden md:flex')}>
-        <button
-          type="button"
-          className=" inline-flex h-12 w-12 items-center justify-center text-slate-300 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-          onClick={() => setDocked(!docked)}
-        >
-          <span className="sr-only">Open sidebar</span>
-          <MenuIcon className="h-10 w-10" aria-hidden="true" />
-        </button>
-      </div>
-      <Transition.Root
-        show={docked}
-        as="nav"
-        className={classNames(
-          'flex h-full flex-col justify-center space-y-1 overflow-hidden px-4 '
-        )}
-      >
-        {navigation.map((item, i, items) => {
-          return (
-            <Transition.Child
-              key={i}
-              as="div"
-              enter={classNames(
-                'transition duration-500 ease-in-out transform',
-                transitionDelayClasses[i]
-              )}
-              enterFrom="translate-x-full opacity-0"
-              enterTo="-translate-x-0 opacity-100"
-              leave={classNames(
-                `transition duration-500 ease-in-out transform`,
-                transitionDelayClasses[i]
-              )}
-              leaveFrom="-translate-x-0 opacity-100"
-              leaveTo="translate-x-full opacity-0"
-            >
-              <Link href={item.href} passHref>
-                <div
-                  className={classNames(
+    <>
+      {/* Mobile Navigation */}
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild className="md:hidden">
+          <Button variant="ghost" size="icon" className="fixed right-4 top-4 z-40">
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="right" className="w-[240px] p-0">
+          <div className="flex h-full flex-col bg-slate-900 p-4">
+            <div className="mb-4 flex justify-end">
+              <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+                <X className="h-6 w-6" />
+                <span className="sr-only">Close menu</span>
+              </Button>
+            </div>
+            <nav className="flex flex-col space-y-4">
+              {navigation.map((item) => (
+                <Link 
+                  key={item.name} 
+                  href={item.href} 
+                  className={cn(
+                    "flex items-center px-2 py-2 text-sm font-medium rounded-md",
                     item.current
-                      ? 'bg-slate-800 text-white'
-                      : 'text-slate-300 hover:bg-slate-700 hover:text-white',
-                    'group flex items-center px-2 py-2 text-sm font-medium'
+                      ? "bg-slate-800 text-white"
+                      : "text-slate-300 hover:bg-slate-700 hover:text-white"
                   )}
                 >
-                  <item.icon
-                    className={classNames(
-                      item.current
-                        ? 'text-slate-300'
-                        : 'text-slate-400 group-hover:text-slate-300',
-                      'mr-3 h-6 w-6 flex-shrink-0'
-                    )}
-                    aria-hidden="true"
-                  />
+                  <item.icon className="mr-3 h-6 w-6 flex-shrink-0" />
                   {item.name}
-                </div>
-              </Link>
-            </Transition.Child>
-          )
-        })}
-      </Transition.Root>
-    </div>
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Desktop Navigation */}
+      <div className="hidden h-full md:flex md:flex-col md:border-l">
+        <nav className="flex flex-col space-y-1 p-4">
+          {navigation.map((item) => (
+            <Link 
+              key={item.name} 
+              href={item.href} 
+              className={cn(
+                "flex items-center px-2 py-2 text-sm font-medium rounded-md",
+                item.current
+                  ? "bg-slate-800 text-white"
+                  : "text-slate-300 hover:bg-slate-700 hover:text-white"
+              )}
+            >
+              <item.icon className="mr-3 h-6 w-6 flex-shrink-0" />
+              {item.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </>
   )
 }
