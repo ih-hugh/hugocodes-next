@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import posts from '@/fixtures/projects'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -23,9 +24,11 @@ const Projects: NextPage = () => {
         {posts.map((post) => (
           <Card key={post.title} className="overflow-hidden border-slate-700 bg-slate-800">
             <div className="aspect-video w-full overflow-hidden">
-              <img
+              <Image
                 src={post.imageUrl}
                 alt={post.title}
+                width={600}
+                height={400}
                 className="h-full w-full object-cover transition-all hover:scale-105"
               />
             </div>
