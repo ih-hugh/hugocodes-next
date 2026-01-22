@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { SkillBar } from "@/components/ui/skill-bar";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { skills } from "@/lib/resume-data";
 
 // Animation variants for scroll-triggered fade-in
@@ -31,13 +32,13 @@ const itemVariants = {
 } as const;
 
 // Map skill categories to neon colors
-const categoryColorMap: Record<string, "cyan" | "magenta" | "purple" | "green" | "orange" | "pink"> = {
+const categoryColorMap: Record<string, "cyan" | "magenta" | "purple" | "green" | "orange" | "ice" | "electric" | "red"> = {
   Frontend: "cyan",
   Backend: "magenta",
   Data: "purple",
   "Cloud/DevOps": "green",
   Practices: "orange",
-  "Soft Skills": "pink",
+  "Soft Skills": "ice",
 };
 
 function Skills() {
@@ -56,16 +57,18 @@ function Skills() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="mb-12">
-          <NeonText
-            as="h2"
-            color="purple"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            Skills
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={4}>
+            <NeonText
+              as="h2"
+              color="purple"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              Skills
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Skills Grid */}

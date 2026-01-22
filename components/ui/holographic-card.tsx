@@ -23,8 +23,9 @@ function HolographicCard({
   const defaultGradient = `linear-gradient(
     90deg,
     var(--neon-cyan),
-    var(--neon-magenta),
+    var(--neon-electric),
     var(--neon-purple),
+    var(--neon-ice),
     var(--neon-cyan)
   )`;
 

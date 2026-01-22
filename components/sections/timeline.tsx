@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { TimelineItem } from "@/components/ui/timeline-item";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { jobs } from "@/lib/resume-data";
 
 // Animation variants for scroll-triggered fade-in
@@ -34,12 +35,12 @@ function Timeline() {
   const sectionRef = React.useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Alternate colors for visual variety
-  const timelineColors: Array<"cyan" | "magenta" | "purple" | "green"> = [
+  // Alternate colors for visual variety (cooler palette)
+  const timelineColors: Array<"cyan" | "electric" | "purple" | "ice"> = [
     "cyan",
-    "magenta",
+    "electric",
     "purple",
-    "green",
+    "ice",
   ];
 
   return (
@@ -71,16 +72,18 @@ function Timeline() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="mb-12">
-          <NeonText
-            as="h2"
-            color="cyan"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            Experience
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={2}>
+            <NeonText
+              as="h2"
+              color="cyan"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              Experience
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Timeline Items */}

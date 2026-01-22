@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { HolographicCard } from "@/components/ui/holographic-card";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { aboutSummary, personalInfo } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Location01Icon, Mail01Icon, Link01Icon } from "@hugeicons/core-free-icons";
@@ -41,22 +42,22 @@ interface ContactBadgeProps {
 function ContactBadge({ icon, label, href }: ContactBadgeProps) {
   const content = (
     <div
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105 glitch-on-hover"
       style={{
         background: "rgba(10, 10, 15, 0.6)",
-        border: "1px solid var(--neon-cyan)",
+        border: "1px solid var(--neon-ice)",
         boxShadow: `
-          0 0 8px rgba(0, 255, 255, 0.2),
-          inset 0 0 8px rgba(0, 255, 255, 0.05)
+          0 0 8px rgba(130, 200, 255, 0.2),
+          inset 0 0 8px rgba(130, 200, 255, 0.05)
         `,
-        color: "var(--neon-cyan)",
+        color: "var(--neon-ice)",
       }}
     >
       <HugeiconsIcon
         icon={icon}
         size={16}
         strokeWidth={2}
-        style={{ color: "var(--neon-cyan)" }}
+        style={{ color: "var(--neon-ice)" }}
       />
       <span>{label}</span>
     </div>
@@ -94,16 +95,18 @@ function About() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="mb-12">
-          <NeonText
-            as="h2"
-            color="cyan"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            About
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={3}>
+            <NeonText
+              as="h2"
+              color="ice"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              About
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Holographic Card Container */}

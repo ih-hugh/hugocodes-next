@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { HolographicCard } from "@/components/ui/holographic-card";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { education } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UniversityIcon, GraduateMaleIcon } from "@hugeicons/core-free-icons";
@@ -38,10 +39,10 @@ const institutionIconMap: Record<string, typeof UniversityIcon> = {
   mdc: GraduateMaleIcon,
 };
 
-// Map institution IDs to neon colors for variety
-const institutionColorMap: Record<string, "cyan" | "magenta" | "purple" | "green"> = {
-  fiu: "cyan",
-  mdc: "purple",
+// Map institution IDs to neon colors for variety (cooler colors)
+const institutionColorMap: Record<string, "cyan" | "electric" | "purple" | "ice"> = {
+  fiu: "electric",
+  mdc: "ice",
 };
 
 interface EducationCardProps {
@@ -61,7 +62,7 @@ function EducationCard({ institution, degree, field, location, year, id }: Educa
   return (
     <HolographicCard
       hoverEffect={true}
-      className="flex-1 min-w-0 sm:min-w-[340px]"
+      className="flex-1 min-w-0 sm:min-w-[340px] glitch-on-hover"
     >
       <div className="flex items-start gap-4">
         {/* Icon */}
@@ -126,16 +127,18 @@ function Education() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="mb-12">
-          <NeonText
-            as="h2"
-            color="green"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            Education
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={3}>
+            <NeonText
+              as="h2"
+              color="green"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              Education
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Education Cards Grid */}
