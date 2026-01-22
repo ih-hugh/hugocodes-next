@@ -39,6 +39,14 @@ const categoryColorMap: Record<string, "cyan" | "magenta" | "purple" | "green" |
   "Cloud/DevOps": "green",
   Practices: "orange",
   "Soft Skills": "ice",
+  Marketing: "electric",
+  "Copywriting": "electric",
+  "Email Marketing": "electric",
+  "Social Media": "electric",
+  "Content Marketing": "electric",
+  "Analytics": "electric",
+  "SEO": "electric",
+  "SEM": "electric",
 };
 
 function Skills() {

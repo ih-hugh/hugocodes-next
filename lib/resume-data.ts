@@ -284,6 +284,13 @@ export const skills: Skill[] = [
     skills: ["Strong communicator/conversationalist"],
     proficiency: 90,
   },
+  {
+    id: "marketing",
+    category: "Marketing",
+    skills: ["SEO", "SEM", "Social Media", "Content Marketing", "Email Marketing", "Analytics", "Copywriting"],
+    proficiency: 45,
+  },
+
 ];
 
 // ============================================================================
