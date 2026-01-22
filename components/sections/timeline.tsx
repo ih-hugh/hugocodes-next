@@ -47,7 +47,7 @@ function Timeline() {
     <section
       ref={sectionRef}
       className="relative py-24 md:py-32 px-4"
-      style={{ backgroundColor: "var(--cyber-dark)" }}
+      style={{ backgroundColor: "transparent" }}
     >
       {/* Vertical Neon Line - Gradient from cyan to magenta */}
       <div

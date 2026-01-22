@@ -44,7 +44,7 @@ function HolographicCard({
       <div
         className="absolute -inset-[2px] rounded-[calc(var(--radius)+2px)] opacity-75 blur-[1px]"
         style={{
-          background: customGradient,
+          backgroundImage: customGradient,
           backgroundSize: "300% 100%",
           animation: "holographic-shift 4s ease-in-out infinite",
         }}

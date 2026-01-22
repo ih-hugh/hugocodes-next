@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { CircuitBoardCard } from "@/components/ui/circuit-board";
 
 interface TimelineJob {
   company: string;
@@ -129,53 +130,62 @@ function TimelineItem({
         <div className={cn("w-0.5 flex-1 mt-2", colors.line)} />
       </div>
 
-      {/* Content card with glitch hover */}
+      {/* Content card with glitch hover and circuit board background */}
       <div
         className={cn(
-          "flex-1 rounded-lg p-5 glitch-on-hover",
+          "flex-1 rounded-lg p-5 glitch-on-hover relative overflow-hidden",
           "bg-[var(--cyber-dark)]/60 dark:bg-[var(--cyber-dark)]/80",
           "backdrop-blur-sm",
           "border-l-2",
           colors.accent
         )}
       >
-        <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">
-              {job.title}
-            </h3>
-            <p className="text-sm text-muted-foreground">{job.company}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            {job.isCurrent && (
-              <span
-                className={cn(
-                  "px-2 py-0.5 text-xs font-medium rounded-full",
-                  "bg-[var(--neon-green)]/20 text-[var(--neon-green)]"
-                )}
-              >
-                Current
-              </span>
-            )}
-            <span className="text-xs text-muted-foreground whitespace-nowrap">
-              {job.dates}
-            </span>
-          </div>
-        </div>
+        {/* Circuit board background for card */}
+        <CircuitBoardCard
+          color={color === "purple" || color === "ice" ? "cyan" : color === "magenta" || color === "red" ? "magenta" : "electric"}
+          className="z-0"
+        />
 
-        <ul className="space-y-1.5">
-          {descriptions.map((desc, i) => (
-            <li
-              key={i}
-              className="text-sm text-muted-foreground leading-relaxed"
-            >
-              {descriptions.length > 1 && (
-                <span className="text-muted-foreground/60 mr-2">-</span>
+        {/* Card content - higher z-index to be above circuit board */}
+        <div className="relative z-10">
+          <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">
+                {job.title}
+              </h3>
+              <p className="text-sm text-muted-foreground">{job.company}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {job.isCurrent && (
+                <span
+                  className={cn(
+                    "px-2 py-0.5 text-xs font-medium rounded-full",
+                    "bg-[var(--neon-green)]/20 text-[var(--neon-green)]"
+                  )}
+                >
+                  Current
+                </span>
               )}
-              {desc}
-            </li>
-          ))}
-        </ul>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                {job.dates}
+              </span>
+            </div>
+          </div>
+
+          <ul className="space-y-1.5">
+            {descriptions.map((desc, i) => (
+              <li
+                key={i}
+                className="text-sm text-muted-foreground leading-relaxed"
+              >
+                {descriptions.length > 1 && (
+                  <span className="text-muted-foreground/60 mr-2">-</span>
+                )}
+                {desc}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </motion.div>
   );

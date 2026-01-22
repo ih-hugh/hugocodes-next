@@ -136,7 +136,7 @@ function Contact() {
     <footer
       ref={sectionRef}
       className="relative py-24 md:py-32 px-4"
-      style={{ backgroundColor: "var(--cyber-dark)" }}
+      style={{ backgroundColor: "transparent" }}
     >
       <motion.div
         className="max-w-4xl mx-auto"

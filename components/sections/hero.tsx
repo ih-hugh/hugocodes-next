@@ -58,6 +58,7 @@ const scrollIndicatorVariants = {
 
 function Hero() {
   const [showTypingEffect, setShowTypingEffect] = React.useState(false);
+  const [isInitialGlitching, setIsInitialGlitching] = React.useState(false);
 
   // Delay typing effect to start after name animation
   React.useEffect(() => {
@@ -65,6 +66,24 @@ function Hero() {
       setShowTypingEffect(true);
     }, 1000);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Trigger intense glitch effect on mount (same as hover effect)
+  React.useEffect(() => {
+    // Small delay to let the page render first
+    const startTimer = setTimeout(() => {
+      setIsInitialGlitching(true);
+    }, 300);
+
+    // Stop the glitch after 0.5s (same duration as hover)
+    const stopTimer = setTimeout(() => {
+      setIsInitialGlitching(false);
+    }, 800);
+
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(stopTimer);
+    };
   }, []);
 
   return (
@@ -82,9 +101,14 @@ function Hero() {
         initial="hidden"
         animate="visible"
       >
-        {/* Name - Large Neon Cyan Text with Glitch */}
+        {/* Name - Large Neon Cyan Text with Glitch on Load + Hover */}
         <motion.div variants={itemVariants}>
-          <GlitchWrapper intensity="normal" trigger="random" delayVariant={1}>
+          <div
+            className="relative glitch-on-hover"
+            style={isInitialGlitching ? {
+              animation: "glitch-intense 0.5s ease-in-out"
+            } : undefined}
+          >
             <NeonText
               as="h1"
               color="cyan"
@@ -93,7 +117,7 @@ function Hero() {
             >
               {personalInfo.name}
             </NeonText>
-          </GlitchWrapper>
+          </div>
         </motion.div>
 
         {/* Title with Typing Effect */}
