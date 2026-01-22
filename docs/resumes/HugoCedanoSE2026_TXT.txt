@@ -1,0 +1,154 @@
+Hugo Cedano
+
+Hollywood, FL 33026
+(305) 790-7719
+hugoce17@gmail.com
+WWW: https://bold.pro/my/hugo-cedano/732r
+
+Websites, Portfolios, Profiles
+
+hugocodes.com
+linkedin.com/in/hceda17
+macrocrafter.io
+
+Professional Summary
+
+Technology enthusiast, agile, and self-motivated Software Engineer passionate about front-end & back-end development; seeking career opportunity where I can add value by adhering to design details & technical specifications to fulfill software requirements consistently while following best practices and current industry accepted standards.
+
+Work History
+
+May 2022 - Current
+
+Goods & Services - Remote
+Staff Software Engineer
+
+Delivered full-stack features across a large-scale risk management/insurance web platform (Vue.js + JavaScript/HTML/CSS/SASS, ColdFusion/CFML, Mura CMS), contributing 1,757 commits spanning UI, APIs, and platform enhancements.
+Built and maintained microapp architecture within the Mura-backed ecosystem, developing Vue modules with Vuex state management and integrating them with CFML REST + WebSocket services.
+Implemented an AI assistant module (“RISKIE”) as one of several major platform features, including real-time WebSocket chat, streaming UX, RBAC-driven feature controls, source attribution, and integrations with AWS services (Bedrock endpoints, S3, CloudWatch, Lambda/API Gateway, SigV4).
+Developed an enterprise reporting system end-to-end: dashboards with configurable filters/date ranges plus PDF generation pipelines (Payroll Audit, ANCP, Prospect) and automated email delivery workflows.
+Modernized build and delivery tooling by migrating to pnpm workspaces and enabling parallelized builds/workspace concurrency, drastically reducing build times and improving CI cost efficiency and developer productivity across microapps.
+Led platform-wide accessibility + UX improvements (WCAG/ARIA, keyboard navigation, focus states), integrated UsableNet (with page blacklisting), replaced legacy Shadowbox with native dialog patterns, and enhanced admin/event flows (registration management, flight seat preferences, bulk notifications).
+
+November 2023 - Current
+
+Frontier Tech Solutions, LLC - Remote
+Founder
+MacroCrafter
+
+AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV gaming communities. Full-stack application featuring real-time streaming chat with multiple LLM providers (xAI Grok, OpenAI), three-tier Stripe subscription system with webhook lifecycle management, and secure multi-tenant architecture using Supabase Auth with PostgreSQL Row-Level Security.
+Tech Stack: Next.js 16, React 19, TypeScript, Supabase (PostgreSQL), Redis, Stripe, Vercel AI SDK, Radix UI, Tailwind CSS, Playwright, Jest, GitHub Actions, Docker
+
+TheWay
+
+AI-powered mobile app guiding users through personalized spiritual journeys with daily devotionals, Orthodox calendar integration, and an intelligent conversational assistant. Features include a full 76-book Orthodox Bible reader with annotations, AI-generated liturgical imagery, gamified progression system, and adaptive onboarding that tailors guidance to each user's spiritual maturity level.
+Tech Stack: React Native, Expo Router, NativeWind, Legend State, NestJS, Supabase (PostgreSQL, Edge Functions, Realtime, Auth), Letta AI, Google Gemini API, TypeScript
+
+October 2020 - Current
+
+Truist Bank - Remote
+JavaScript Developer
+
+Part of a Distributive Team.
+Contributing towards the development of various software solutions to deliver Cryptography as a Service. (see below)
+Contributing towards the development of a Web Application with Nuxt / Vue.
+Contributing towards the development of a GraphQL API written in TypeScript ontop of NodeJS.
+Contributing towards the development of a Command Line Interface written in NodeJS.
+
+October 2018 - September 2020
+
+Risk Management Solutions Inc. - Remote
+Front End Developer
+
+Part of a Distributive Team.
+Contributed towards the development of a User Interface Component Library written with HTML, CSS, & JavaScript; more specifically, Stencil.JS.
+Contributed towards the development of a legacy web application written in CoffeeScript which used React.js for its front-end elements and flux for state management.
+Contributed towards the development of web application for Treaty Underwriting authored in Typescript, Vue.js, Nuxt.js, with Vuex for state management, and other tooling such as Tailwind, and Axios.
+Maintained related Unit & Feature tests for changes made.
+Worked in an Agile-driven environment to effectively maintain project timelines and utilize available resources.
+
+June 2018 - September 2018
+
+ClassWallet - Hollywood, FL
+Software Developer
+
+Developed an E-commerce Web Application with React, Redux, Node, Express, and MongoDB. 
+Implemented Unit Tests with Jest/Enzyme; deployed with Docker. 
+Designed and developed scripts with JavaScript to query various collections within MongoDB to create reports for internal teams.
+
+February 2017 - February 2018
+
+Smart Monkeys Inc. - Miami, FL
+Software Developer
+
+Contributed towards the development of a complex web application that is at the heart of the ISAAC Platform.
+Navigated through a MeteorJS based stack that integrates dockerized NodeJS based microservices & MongoDB.
+Migrated about 80% of the web application from BlazeJS to ReactJS.
+Developed new views with ReactJS & SASS
+
+June 2016 - December 2016
+
+CALLPAL, LLC - Miami, FL
+Software Engineer
+
+Designed and developed RESTful APIs to analyze and display statistics extrapolated from data stored in MySQL and Couchbase databases with ExpressJS ontop of NodeJS.
+Created a front-end project to display analyzed data through charts with HTML5, CSS3 & JavaScript.
+Created CRON Jobs in existing back-end APIs to schedule processes across internal NodeJS projects.
+Migrated various data sets from MySQL servers to Couchbase servers.
+
+October 2015 - January 2016
+
+Freelance - Miami, FL
+Full Stack Developer
+
+Designed and developed SPAs for local clients.
+Sometimes used MeteorJS
+
+Views were written ReactJS 
+
+Wrote RESTful APIs with NodeJS; sometimes integrating MongoDB for persistent storage. 
+
+March 2015 - August 2015
+
+SapientRazorfish Miami - Miami, FL
+Front End Developer
+
+Created web modules using HTML5, CSS3, & JavaScript.
+Worked with content management system (CMS) Interwoven.
+Worked on the Moment of Yes Sweepstakes Landing Page
+Implemented various pages for Fiat Chrysler's Dodge brand
+Turned designs into code
+
+Fixed various bugs 
+
+November 2014 - January 2015
+
+Freelance - Miami, FL
+Full Stack Developer
+
+Designed and developed a single page web application with NodeJS, Express, HTML, CSS,
+JavaScript responsible for displaying various services offered by the company and the web app
+allows customers to send contact information when submitting inquiries.
+
+Education
+
+2015
+Florida International University Miami, FL
+Bachelor of Science Computer Science
+
+2012
+Miami Dade College North Campus Westview, FL
+Associate of Arts Computer Science
+
+Skills
+
+Frontend: HTML5, CSS3/SASS, JavaScript/TypeScript, React/Next.js, Vue/Nuxt
+
+Backend: Node.js (Express, NestJS), ColdFusion (CFML/CFScript), REST, GraphQL
+
+Data: MongoDB, MySQL, PostgreSQL, Couchbase
+
+Cloud/DevOps: Supabase, AWS, Docker, Heroku, Vercel, Netlify 
+
+Practices: TDD, Functional Programming, Software Design, MVC, Microservices, Serverless
+
+Soft Skills: Strong communicator/conversationalist
