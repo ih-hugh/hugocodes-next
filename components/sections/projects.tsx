@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { HolographicCard } from "@/components/ui/holographic-card";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { projects } from "@/lib/resume-data";
 
 // Animation variants for scroll-triggered fade-in
@@ -36,12 +37,14 @@ interface TechBadgeProps {
 }
 
 function TechBadge({ tech, index }: TechBadgeProps) {
-  // Rotate through neon colors for variety
+  // Rotate through neon colors for variety (replaced pink with cooler colors)
   const colors = [
     { bg: "var(--neon-cyan)", text: "var(--neon-cyan)" },
-    { bg: "var(--neon-magenta)", text: "var(--neon-magenta)" },
+    { bg: "var(--neon-electric)", text: "var(--neon-electric)" },
     { bg: "var(--neon-purple)", text: "var(--neon-purple)" },
+    { bg: "var(--neon-ice)", text: "var(--neon-ice)" },
     { bg: "var(--neon-green)", text: "var(--neon-green)" },
+    { bg: "var(--neon-red)", text: "var(--neon-red)" },
   ];
   const color = colors[index % colors.length];
 
@@ -108,17 +111,19 @@ function ProjectCard({ name, description, techStack, url }: ProjectCardProps) {
   const isComingSoon = !url;
 
   const cardContent = (
-    <HolographicCard className="h-full relative">
+    <HolographicCard className="h-full relative glitch-on-hover">
       {/* Coming Soon Badge */}
       {isComingSoon && <ComingSoonBadge />}
 
       {/* Project Name with Glitch Effect */}
-      <h3
-        className="glitch-hover text-xl sm:text-2xl font-bold mb-4 cursor-pointer"
-        style={{ color: "var(--neon-cyan)" }}
-      >
-        {name}
-      </h3>
+      <GlitchWrapper intensity="subtle" trigger="hover">
+        <h3
+          className="glitch-hover text-xl sm:text-2xl font-bold mb-4 cursor-pointer"
+          style={{ color: "var(--neon-electric)" }}
+        >
+          {name}
+        </h3>
+      </GlitchWrapper>
 
       {/* Description */}
       <p
@@ -169,16 +174,18 @@ function Projects() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="mb-12">
-          <NeonText
-            as="h2"
-            color="magenta"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            Projects
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={2}>
+            <NeonText
+              as="h2"
+              color="electric"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              Projects
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Projects Grid - 2 columns on desktop, stacked on mobile */}

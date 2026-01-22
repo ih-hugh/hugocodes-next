@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
+import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
 import { personalInfo } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Mail01Icon, Linkedin01Icon, Globe02Icon, NewTwitterIcon, GithubIcon } from "@hugeicons/core-free-icons";
@@ -31,7 +32,7 @@ const itemVariants = {
   },
 } as const;
 
-// Contact link configuration
+// Contact link configuration (replaced pink with cooler colors)
 const contactLinks = [
   {
     id: "email",
@@ -45,25 +46,25 @@ const contactLinks = [
     label: "LinkedIn",
     icon: Linkedin01Icon,
     href: `https://${personalInfo.linkedin}`,
-    color: "magenta",
+    color: "electric",
   },
   {
     id: "x",
     label: "X",
     icon: NewTwitterIcon,
     href: "https://x.com/ih_hugh",
-    color: "green",
+    color: "ice",
   },
   {
     id: "github",
     label: "GitHub",
     icon: GithubIcon,
     href: "https://github.com/ih-hugh",
-    color: "orange",
+    color: "purple",
   },
 ] as const;
 
-type NeonColor = "cyan" | "magenta" | "purple" | "green" | "orange";
+type NeonColor = "cyan" | "magenta" | "purple" | "green" | "orange" | "ice" | "electric" | "red";
 
 interface ContactLinkProps {
   icon: typeof Mail01Icon;
@@ -80,7 +81,7 @@ function ContactLink({ icon, label, href, color }: ContactLinkProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col items-center gap-3 p-4 rounded-lg transition-all duration-300"
+      className="group flex flex-col items-center gap-3 p-4 rounded-lg transition-all duration-300 glitch-on-hover"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       style={{
@@ -143,16 +144,18 @@ function Contact() {
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading */}
+        {/* Section Heading with Glitch */}
         <motion.div variants={itemVariants} className="text-center mb-12">
-          <NeonText
-            as="h2"
-            color="magenta"
-            intensity="normal"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-          >
-            Let&apos;s Connect
-          </NeonText>
+          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={5}>
+            <NeonText
+              as="h2"
+              color="red"
+              intensity="normal"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+            >
+              Let&apos;s Connect
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Contact Links */}

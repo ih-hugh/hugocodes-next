@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { NeonText } from "@/components/ui/neon-text";
 import { TypingEffect } from "@/components/ui/typing-effect";
 import { ScanLines } from "@/components/ui/scan-lines";
+import { GlitchWrapper, GlitchText } from "@/components/ui/glitch-wrapper";
 import { personalInfo } from "@/lib/resume-data";
 
 // Animation variants for staggered entrance
@@ -81,16 +82,18 @@ function Hero() {
         initial="hidden"
         animate="visible"
       >
-        {/* Name - Large Neon Cyan Text */}
+        {/* Name - Large Neon Cyan Text with Glitch */}
         <motion.div variants={itemVariants}>
-          <NeonText
-            as="h1"
-            color="cyan"
-            intensity="intense"
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight uppercase"
-          >
-            {personalInfo.name}
-          </NeonText>
+          <GlitchWrapper intensity="normal" trigger="random" delayVariant={1}>
+            <NeonText
+              as="h1"
+              color="cyan"
+              intensity="intense"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight uppercase"
+            >
+              {personalInfo.name}
+            </NeonText>
+          </GlitchWrapper>
         </motion.div>
 
         {/* Title with Typing Effect */}
@@ -114,25 +117,27 @@ function Hero() {
           variants={badgeVariants}
           className="mt-10 md:mt-14"
         >
-          <div
-            className="relative inline-block px-6 py-3 rounded-lg"
-            style={{
-              background: "rgba(10, 10, 15, 0.8)",
-              border: "2px solid var(--neon-cyan)",
-              boxShadow: `
-                0 0 10px var(--neon-cyan),
-                0 0 20px rgba(0, 255, 255, 0.3),
-                inset 0 0 10px rgba(0, 255, 255, 0.1)
-              `,
-            }}
-          >
-            <span
-              className="text-sm sm:text-base md:text-lg font-semibold tracking-wide"
-              style={{ color: "var(--neon-cyan)" }}
+          <GlitchWrapper intensity="subtle" trigger="hover">
+            <div
+              className="relative inline-block px-6 py-3 rounded-lg glitch-on-hover"
+              style={{
+                background: "rgba(10, 10, 15, 0.8)",
+                border: "2px solid var(--neon-electric)",
+                boxShadow: `
+                  0 0 10px var(--neon-electric),
+                  0 0 20px rgba(100, 150, 255, 0.3),
+                  inset 0 0 10px rgba(100, 150, 255, 0.1)
+                `,
+              }}
             >
-              {personalInfo.yearsExperience} Years Experience
-            </span>
-          </div>
+              <span
+                className="text-sm sm:text-base md:text-lg font-semibold tracking-wide"
+                style={{ color: "var(--neon-electric)" }}
+              >
+                {personalInfo.yearsExperience} Years Experience
+              </span>
+            </div>
+          </GlitchWrapper>
         </motion.div>
       </motion.div>
 

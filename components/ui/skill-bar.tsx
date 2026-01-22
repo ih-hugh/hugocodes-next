@@ -16,7 +16,7 @@ interface SkillCategory {
 
 interface SkillBarProps {
   data: SkillCategory;
-  color?: "cyan" | "magenta" | "purple" | "green" | "orange" | "pink";
+  color?: "cyan" | "magenta" | "purple" | "green" | "orange" | "ice" | "electric" | "red";
   className?: string;
   /** Delay before animation starts (in seconds) */
   delay?: number;
@@ -53,11 +53,23 @@ const colorMap = {
     tag: "bg-[var(--neon-orange)]/20 text-[var(--neon-orange)] border-[var(--neon-orange)]/30",
     label: "text-[var(--neon-orange)]",
   },
-  pink: {
-    gradient: "from-[var(--neon-pink)] to-[var(--neon-pink)]/60",
-    glow: "shadow-[0_0_10px_var(--neon-pink)]",
-    tag: "bg-[var(--neon-pink)]/20 text-[var(--neon-pink)] border-[var(--neon-pink)]/30",
-    label: "text-[var(--neon-pink)]",
+  ice: {
+    gradient: "from-[var(--neon-ice)] to-[var(--neon-ice)]/60",
+    glow: "shadow-[0_0_10px_var(--neon-ice)]",
+    tag: "bg-[var(--neon-ice)]/20 text-[var(--neon-ice)] border-[var(--neon-ice)]/30",
+    label: "text-[var(--neon-ice)]",
+  },
+  electric: {
+    gradient: "from-[var(--neon-electric)] to-[var(--neon-electric)]/60",
+    glow: "shadow-[0_0_10px_var(--neon-electric)]",
+    tag: "bg-[var(--neon-electric)]/20 text-[var(--neon-electric)] border-[var(--neon-electric)]/30",
+    label: "text-[var(--neon-electric)]",
+  },
+  red: {
+    gradient: "from-[var(--neon-red)] to-[var(--neon-red)]/60",
+    glow: "shadow-[0_0_10px_var(--neon-red)]",
+    tag: "bg-[var(--neon-red)]/20 text-[var(--neon-red)] border-[var(--neon-red)]/30",
+    label: "text-[var(--neon-red)]",
   },
 };
 
@@ -135,7 +147,7 @@ function SkillBar({
 interface SingleSkillBarProps {
   name: string;
   proficiency: number;
-  color?: "cyan" | "magenta" | "purple" | "green" | "orange" | "pink";
+  color?: "cyan" | "magenta" | "purple" | "green" | "orange" | "ice" | "electric" | "red";
   className?: string;
   delay?: number;
 }

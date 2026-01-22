@@ -17,7 +17,7 @@ interface TimelineItemProps {
   index: number;
   className?: string;
   /** Color for the timeline dot and accent */
-  color?: "cyan" | "magenta" | "purple" | "green";
+  color?: "cyan" | "magenta" | "purple" | "green" | "ice" | "electric" | "red";
 }
 
 const colorMap = {
@@ -44,6 +44,24 @@ const colorMap = {
     glow: "shadow-[0_0_10px_var(--neon-green),0_0_20px_var(--neon-green)]",
     line: "bg-[var(--neon-green)]/30",
     accent: "border-[var(--neon-green)]/50",
+  },
+  ice: {
+    dot: "bg-[var(--neon-ice)]",
+    glow: "shadow-[0_0_10px_var(--neon-ice),0_0_20px_var(--neon-ice)]",
+    line: "bg-[var(--neon-ice)]/30",
+    accent: "border-[var(--neon-ice)]/50",
+  },
+  electric: {
+    dot: "bg-[var(--neon-electric)]",
+    glow: "shadow-[0_0_10px_var(--neon-electric),0_0_20px_var(--neon-electric)]",
+    line: "bg-[var(--neon-electric)]/30",
+    accent: "border-[var(--neon-electric)]/50",
+  },
+  red: {
+    dot: "bg-[var(--neon-red)]",
+    glow: "shadow-[0_0_10px_var(--neon-red),0_0_20px_var(--neon-red)]",
+    line: "bg-[var(--neon-red)]/30",
+    accent: "border-[var(--neon-red)]/50",
   },
 };
 
@@ -111,10 +129,10 @@ function TimelineItem({
         <div className={cn("w-0.5 flex-1 mt-2", colors.line)} />
       </div>
 
-      {/* Content card */}
+      {/* Content card with glitch hover */}
       <div
         className={cn(
-          "flex-1 rounded-lg p-5",
+          "flex-1 rounded-lg p-5 glitch-on-hover",
           "bg-[var(--cyber-dark)]/60 dark:bg-[var(--cyber-dark)]/80",
           "backdrop-blur-sm",
           "border-l-2",

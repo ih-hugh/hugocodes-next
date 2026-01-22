@@ -24,9 +24,17 @@ const neonColors = {
     color: "var(--neon-orange)",
     shadow: "var(--neon-orange)",
   },
-  pink: {
-    color: "var(--neon-pink)",
-    shadow: "var(--neon-pink)",
+  ice: {
+    color: "var(--neon-ice)",
+    shadow: "var(--neon-ice)",
+  },
+  electric: {
+    color: "var(--neon-electric)",
+    shadow: "var(--neon-electric)",
+  },
+  red: {
+    color: "var(--neon-red)",
+    shadow: "var(--neon-red)",
   },
 } as const;
 
