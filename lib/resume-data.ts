@@ -68,7 +68,7 @@ export const personalInfo: PersonalInfo = {
 // About / Summary
 // ============================================================================
 
-export const aboutSummary = `Full-stack engineer with 10+ years building web applications across fintech, insurance, and e-commerce. I work across the entire stack—React, Vue, Next.js, Node.js, PostgreSQL, AWS—and I've embraced AI-assisted development as a force multiplier. The future of software is agentic, and I'm already there: using AI tools to ship faster, iterate smarter, and focus on the problems that actually matter. I care about products, not algorithms you'll never use in production.`;
+export const aboutSummary = `Full-stack engineer with 10+ years building web applications across fintech, insurance, and e-commerce. I work across the entire stack—React, Vue, Next.js, Node.js, PostgreSQL, AWS, Supabase—and I've embraced AI-assisted development as a force multiplier. The future of software is agentic, and I'm already there: using AI tools to ship faster, iterate smarter, and focus on solving problems that lead to impact and growth, while worrying less about the noise that sometimes stagnates progress.`;
 
 // ============================================================================
 // Featured Projects
