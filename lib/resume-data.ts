@@ -93,6 +93,26 @@ export const projects: Project[] = [
     techStack: ["React Native", "Expo Router", "NativeWind", "Legend State", "NestJS", "Supabase (PostgreSQL, Edge Functions, Realtime, Auth)", "Letta AI", "Google Gemini API", "TypeScript"],
     featured: true,
   },
+  {
+    id: "frontier-terminal",
+    name: "Frontier Terminal",
+    url: "https://frontier-terminal.com",
+    description:
+      "AI-native financial intelligence platform built as a Bloomberg Terminal alternative for retail investors. Features real-time market data, AI-powered research reports, personalized daily briefings, multi-channel alert delivery (Telegram, Discord, email, webhooks), a conversational AI analyst with persistent portfolio memory, and a multi-agent backend architecture for continuous intelligence delivery.",
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Supabase (PostgreSQL, Edge Functions, Realtime)",
+      "Vercel AI SDK",
+      "Tailwind CSS v4",
+      "shadcn/ui",
+      "Stripe",
+      "Fly.io",
+      "GitHub Actions",
+    ],
+    featured: true,
+  },
 ];
 
 // ============================================================================
@@ -126,6 +146,7 @@ export const jobs: Job[] = [
     description: [
       "MacroCrafter: AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV gaming communities. Full-stack application featuring real-time streaming chat with multiple LLM providers (xAI Grok, OpenAI), three-tier Stripe subscription system with webhook lifecycle management, and secure multi-tenant architecture using Supabase Auth with PostgreSQL Row-Level Security.",
       "TheWay: AI-powered mobile app guiding users through personalized spiritual journeys with daily devotionals, Orthodox calendar integration, and an intelligent conversational assistant. Features include a full 76-book Orthodox Bible reader with annotations, AI-generated liturgical imagery, gamified progression system, and adaptive onboarding that tailors guidance to each user's spiritual maturity level.",
+      "Frontier Terminal: AI-native financial intelligence platform and Bloomberg Terminal alternative for retail investors. Built multi-agent backend architecture delivering real-time market data, AI research reports, personalized daily briefings, and multi-channel alert delivery (Telegram, Discord, email, custom webhooks) with conversational AI analyst and persistent portfolio memory.",
     ],
   },
   {

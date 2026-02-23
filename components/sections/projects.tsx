@@ -158,6 +158,78 @@ function ProjectCard({ name, description, techStack, url }: ProjectCardProps) {
   return cardContent;
 }
 
+interface FeaturedProjectCardProps {
+  name: string;
+  description: string;
+  techStack: string[];
+  url?: string;
+}
+
+function FeaturedBadge() {
+  return (
+    <motion.span
+      className="absolute top-4 right-4 px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full"
+      style={{
+        background: `linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(100, 150, 255, 0.2))`,
+        border: "1px solid rgba(0, 255, 255, 0.4)",
+        color: "var(--neon-cyan)",
+        boxShadow: `0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(0, 255, 255, 0.1)`,
+        backdropFilter: "blur(4px)",
+      }}
+      animate={{ scale: [1, 1.02, 1] }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+    >
+      Featured
+    </motion.span>
+  );
+}
+
+function FeaturedProjectCard({ name, description, techStack, url }: FeaturedProjectCardProps) {
+  const cardContent = (
+    <HolographicCard className="relative glitch-on-hover">
+      <FeaturedBadge />
+
+      {/* Project Name */}
+      <GlitchWrapper intensity="subtle" trigger="hover">
+        <h3
+          className="text-2xl sm:text-3xl font-bold mb-6 cursor-pointer"
+          style={{ color: "var(--neon-electric)" }}
+        >
+          {name}
+        </h3>
+      </GlitchWrapper>
+
+      {/* Two-column interior on md+ */}
+      <div className="flex flex-col md:flex-row gap-6 md:gap-10">
+        {/* Description */}
+        <p
+          className="text-sm sm:text-base leading-relaxed md:flex-1"
+          style={{ color: "rgba(255, 255, 255, 0.75)" }}
+        >
+          {description}
+        </p>
+
+        {/* Tech Stack */}
+        <div className="flex flex-wrap gap-2 content-start md:w-64 md:shrink-0">
+          {techStack.map((tech, index) => (
+            <TechBadge key={tech} tech={tech} index={index} />
+          ))}
+        </div>
+      </div>
+    </HolographicCard>
+  );
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer" className="block">
+        {cardContent}
+      </a>
+    );
+  }
+
+  return cardContent;
+}
+
 function Projects() {
   const sectionRef = React.useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
@@ -188,21 +260,38 @@ function Projects() {
           </GlitchWrapper>
         </motion.div>
 
-        {/* Projects Grid - 2 columns on desktop, stacked on mobile */}
+        {/* Row 1: MacroCrafter + TheWay — 2-column grid */}
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8"
         >
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              name={project.name}
-              description={project.description}
-              techStack={project.techStack}
-              url={project.url}
-            />
-          ))}
+          {projects
+            .filter((p) => p.id !== "frontier-terminal")
+            .map((project) => (
+              <ProjectCard
+                key={project.id}
+                name={project.name}
+                description={project.description}
+                techStack={project.techStack}
+                url={project.url}
+              />
+            ))}
         </motion.div>
+
+        {/* Row 2: Frontier Terminal — featured full-width card */}
+        {projects.find((p) => p.id === "frontier-terminal") && (() => {
+          const ft = projects.find((p) => p.id === "frontier-terminal")!;
+          return (
+            <motion.div variants={itemVariants}>
+              <FeaturedProjectCard
+                name={ft.name}
+                description={ft.description}
+                techStack={ft.techStack}
+                url={ft.url}
+              />
+            </motion.div>
+          );
+        })()}
       </motion.div>
     </section>
   );
