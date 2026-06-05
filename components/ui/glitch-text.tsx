@@ -87,8 +87,15 @@ function GlitchText({
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [active, setActive] = React.useState(false);
 
+  // Decide once on mount whether to run the canvas effect. Flipping `active`
+  // mounts the <canvas>; the animation effect below then picks up its ref.
+  // Reduced-motion users keep the static neon DOM heading (no canvas).
   React.useEffect(() => {
-    if (prefersReducedMotion()) return; // static neon DOM heading only
+    if (!prefersReducedMotion()) setActive(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!active) return; // canvas only exists in the DOM once active is true
     const container = containerRef.current;
     const sizer = sizerRef.current;
     const canvas = canvasRef.current;
@@ -96,7 +103,6 @@ function GlitchText({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    setActive(true);
 
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const resolvedColor = getComputedStyle(sizer).color || "#5ff";
@@ -235,8 +241,8 @@ function GlitchText({
       ro.disconnect();
       io.disconnect();
     };
-    // text/color/decode are stable for a given heading; re-run if they change.
-  }, [text, color, decode]);
+    // re-run when the canvas mounts (active) or the heading content changes.
+  }, [active, text, color, decode]);
 
   const neonShadow = `0 0 6px ${colorVar[color]}, 0 0 14px ${colorVar[color]}, 0 0 28px ${colorVar[color]}`;
 
@@ -247,9 +253,13 @@ function GlitchText({
         Tag,
         {
           ref: sizerRef,
-          className: cn(className, active ? "text-transparent" : undefined),
+          className: cn(className),
+          // When active, keep `color` set (the canvas reads it via getComputedStyle
+          // to resolve the CSS var) but hide the real glyphs with a transparent
+          // text fill — leaving the canvas as the only visible layer. The heading
+          // text stays in the DOM (selectable, SEO, screen-reader friendly).
           style: active
-            ? { color: colorVar[color] } // value used by canvas via getComputedStyle
+            ? { color: colorVar[color], WebkitTextFillColor: "transparent" }
             : { color: colorVar[color], textShadow: neonShadow },
         },
         text,
