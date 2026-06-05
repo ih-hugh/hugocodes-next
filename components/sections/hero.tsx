@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { ScanLines } from "@/components/ui/scan-lines";
 import { TypingEffect } from "@/components/ui/typing-effect";
 import { personalInfo } from "@/lib/resume-data";
@@ -100,6 +99,7 @@ function HeroLink({ href, label, variant = "secondary", external = false }: Hero
 
   return (
     <motion.a
+      data-glitch=""
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noopener noreferrer" : undefined}
@@ -115,7 +115,10 @@ function HeroLink({ href, label, variant = "secondary", external = false }: Hero
 
 function HeroStat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur-md">
+    <div
+      data-glitch=""
+      className="rounded-2xl border border-white/10 bg-black/20 p-4 backdrop-blur-md"
+    >
       <div className="font-mono text-2xl font-bold text-[var(--neon-cyan)] sm:text-3xl">
         {value}
       </div>
@@ -178,6 +181,7 @@ function TerminalPanel() {
           {heroStats.map((stat) => (
             <div
               key={stat.label}
+              data-glitch=""
               className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center"
             >
               <div className="font-mono text-lg font-bold text-[var(--neon-ice)]">
@@ -196,7 +200,6 @@ function TerminalPanel() {
 
 function Hero() {
   const [showTypingEffect, setShowTypingEffect] = React.useState(false);
-  const [isInitialGlitching, setIsInitialGlitching] = React.useState(false);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -204,21 +207,6 @@ function Hero() {
     }, 850);
 
     return () => clearTimeout(timer);
-  }, []);
-
-  React.useEffect(() => {
-    const startTimer = setTimeout(() => {
-      setIsInitialGlitching(true);
-    }, 260);
-
-    const stopTimer = setTimeout(() => {
-      setIsInitialGlitching(false);
-    }, 820);
-
-    return () => {
-      clearTimeout(startTimer);
-      clearTimeout(stopTimer);
-    };
   }, []);
 
   return (
@@ -245,6 +233,7 @@ function Hero() {
         <div className="max-w-4xl">
           <motion.div
             variants={itemVariants}
+            data-glitch=""
             className="mb-6 inline-flex items-center gap-3 rounded-full border border-[var(--neon-cyan)]/30 bg-[var(--neon-cyan)]/[0.05] px-4 py-2 font-mono text-xs uppercase tracking-[0.26em] text-[var(--neon-cyan)] shadow-[0_0_24px_rgba(0,255,255,0.08)]"
           >
             <span className="size-2 rounded-full bg-[var(--neon-green)] shadow-[0_0_12px_var(--neon-green)]" />
@@ -252,25 +241,13 @@ function Hero() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <GlitchWrapper intensity="subtle" trigger="hover">
-              <div
-                className="relative glitch-on-hover"
-                style={
-                  isInitialGlitching
-                    ? { animation: "glitch-intense 0.56s ease-in-out" }
-                    : undefined
-                }
-              >
-                <NeonText
-                  as="h1"
-                  color="cyan"
-                  intensity="intense"
-                  className="max-w-5xl text-5xl font-black uppercase tracking-[-0.08em] sm:text-7xl md:text-8xl lg:text-9xl"
-                >
-                  {personalInfo.name}
-                </NeonText>
-              </div>
-            </GlitchWrapper>
+            <GlitchText
+              as="h1"
+              text={personalInfo.name}
+              color="cyan"
+              decode
+              className="block max-w-5xl text-5xl font-black uppercase tracking-[-0.08em] sm:text-7xl md:text-8xl lg:text-9xl"
+            />
           </motion.div>
 
           <motion.div

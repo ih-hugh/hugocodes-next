@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { jobs, type Job } from "@/lib/resume-data";
 
 const containerVariants = {
@@ -93,6 +92,7 @@ function ExperienceCard({ job, index }: { job: Job; index: number }) {
 
   return (
     <motion.article
+      data-glitch=""
       className="group relative flex gap-4 sm:gap-6"
       variants={itemVariants}
     >
@@ -197,16 +197,12 @@ function Timeline() {
             <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-cyan)]/75">
               Route history
             </div>
-            <GlitchWrapper intensity="subtle" trigger="random" delayVariant={2}>
-              <NeonText
-                as="h2"
-                color="cyan"
-                intensity="normal"
-                className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-              >
-                Experience
-              </NeonText>
-            </GlitchWrapper>
+            <GlitchText
+              as="h2"
+              text="Experience"
+              color="cyan"
+              className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+            />
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
               A decade-plus route through product engineering, enterprise
               systems, fintech, insurance, AI products, and full-stack ownership.

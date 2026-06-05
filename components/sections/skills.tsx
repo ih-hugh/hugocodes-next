@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { skills, type Skill } from "@/lib/resume-data";
 
 const containerVariants = {
@@ -43,6 +42,7 @@ const categoryColors: Record<string, string> = {
 function SkillNode({ name, color, index }: { name: string; color: string; index: number }) {
   return (
     <motion.span
+      data-glitch=""
       className="inline-flex items-center rounded-full border bg-black/24 px-3 py-1.5 text-xs font-medium text-white/68"
       style={{
         borderColor: `color-mix(in oklch, ${color} 28%, transparent)`,
@@ -64,6 +64,7 @@ function SkillCluster({ skill, index }: { skill: Skill; index: number }) {
 
   return (
     <motion.article
+      data-glitch=""
       className="group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-[rgba(5,5,8,0.64)] p-5 backdrop-blur-xl transition-colors hover:border-white/20 sm:p-6"
       variants={itemVariants}
       whileHover={{ y: -5, scale: 1.01 }}
@@ -171,16 +172,12 @@ function Skills() {
             <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-purple)]/75">
               Capability matrix
             </div>
-            <GlitchWrapper intensity="subtle" trigger="random" delayVariant={4}>
-              <NeonText
-                as="h2"
-                color="purple"
-                intensity="normal"
-                className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-              >
-                Skills
-              </NeonText>
-            </GlitchWrapper>
+            <GlitchText
+              as="h2"
+              text="Skills"
+              color="purple"
+              className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+            />
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
               A practical systems map across interface work, APIs, data,
               infrastructure, product delivery, and growth loops.

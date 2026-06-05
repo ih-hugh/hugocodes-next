@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
 import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { projects, type Project } from "@/lib/resume-data";
 
 const containerVariants = {
@@ -56,6 +56,7 @@ function TechBadge({ tech, index, compact = false }: TechBadgeProps) {
 
   return (
     <span
+      data-glitch=""
       className="inline-flex items-center rounded-full border font-mono font-medium"
       style={{
         background: `color-mix(in oklch, ${color} 12%, transparent)`,
@@ -228,6 +229,7 @@ function ProductModule({ project, index }: { project: Project; index: number }) 
 
   const content = (
     <motion.article
+      data-glitch=""
       className="group relative h-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-[rgba(5,5,8,0.62)] p-5 backdrop-blur-xl transition-colors hover:border-white/20 sm:p-6"
       whileHover={{ y: -5, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 240, damping: 24 }}
@@ -328,16 +330,12 @@ function Projects() {
           <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-electric)]/75">
             Selected systems
           </div>
-          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={2}>
-            <NeonText
-              as="h2"
-              color="electric"
-              intensity="normal"
-              className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-            >
-              Projects
-            </NeonText>
-          </GlitchWrapper>
+          <GlitchText
+            as="h2"
+            text="Projects"
+            color="electric"
+            className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+          />
           <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
             Products built as operating systems: commerce, mobile guidance,
             financial intelligence, agent workflows, realtime delivery, and full

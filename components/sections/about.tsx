@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { aboutSummary, personalInfo } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -114,7 +113,10 @@ function DownloadButton({ label, href, filename }: DownloadButtonProps) {
 
 function SignalCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-md">
+    <div
+      data-glitch=""
+      className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 backdrop-blur-md"
+    >
       <div className="font-mono text-2xl font-bold text-[var(--neon-ice)]">
         {value}
       </div>
@@ -153,16 +155,12 @@ function About() {
           <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-ice)]/75">
             System profile
           </div>
-          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={3}>
-            <NeonText
-              as="h2"
-              color="ice"
-              intensity="normal"
-              className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-            >
-              About
-            </NeonText>
-          </GlitchWrapper>
+          <GlitchText
+            as="h2"
+            text="About"
+            color="ice"
+            className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+          />
         </motion.div>
 
         <motion.div
@@ -246,6 +244,7 @@ function About() {
                 {operatingModes.map((mode, index) => (
                   <motion.div
                     key={mode}
+                    data-glitch=""
                     className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.035] p-3"
                     initial={{ opacity: 0, x: 18 }}
                     animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 18 }}

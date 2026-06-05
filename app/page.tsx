@@ -6,10 +6,12 @@ import { Skills } from "@/components/sections/skills";
 import { Education } from "@/components/sections/education";
 import { Contact } from "@/components/sections/contact";
 import { AnimatedPageShell } from "@/components/layout/animated-page-shell";
+import { GlitchController } from "@/components/ui/glitch-controller";
 
 export default function Page() {
   return (
     <AnimatedPageShell>
+      <GlitchController />
       <section id="hero"><Hero /></section>
       <section id="about"><About /></section>
       <section id="projects"><Projects /></section>

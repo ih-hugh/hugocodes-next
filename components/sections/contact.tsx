@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { personalInfo } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -75,6 +74,7 @@ const contactLinks = [
 function ContactLink({ link, index }: { link: (typeof contactLinks)[number]; index: number }) {
   return (
     <motion.a
+      data-glitch=""
       href={link.href}
       target={link.href.startsWith("http") ? "_blank" : undefined}
       rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
@@ -156,16 +156,12 @@ function Contact() {
               <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-red)]/75">
                 Transmission endpoint
               </div>
-              <GlitchWrapper intensity="subtle" trigger="random" delayVariant={5}>
-                <NeonText
-                  as="h2"
-                  color="red"
-                  intensity="normal"
-                  className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-                >
-                  Let&apos;s Connect
-                </NeonText>
-              </GlitchWrapper>
+              <GlitchText
+                as="h2"
+                text="Let's Connect"
+                color="red"
+                className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+              />
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">
                 Open to conversations around product engineering, AI-native
                 software, full-stack systems, and ambitious builds that need a

@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { NeonText } from "@/components/ui/neon-text";
+import { GlitchText } from "@/components/ui/glitch-text";
 import { education, type Education as EducationData } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { GraduateMaleIcon, UniversityIcon } from "@hugeicons/core-free-icons";
@@ -54,6 +53,7 @@ function CredentialNode({ credential, index }: { credential: EducationData; inde
   return (
     <motion.article
       variants={itemVariants}
+      data-glitch=""
       className="group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-[rgba(5,5,8,0.64)] p-5 backdrop-blur-xl transition-colors hover:border-white/20 sm:p-6"
       whileHover={{ y: -5, scale: 1.01 }}
       transition={{ type: "spring", stiffness: 240, damping: 24 }}
@@ -134,16 +134,12 @@ function Education() {
           <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-green)]/75">
             Credentials
           </div>
-          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={3}>
-            <NeonText
-              as="h2"
-              color="green"
-              intensity="normal"
-              className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
-            >
-              Education
-            </NeonText>
-          </GlitchWrapper>
+          <GlitchText
+            as="h2"
+            text="Education"
+            color="green"
+            className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+          />
           <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
             Formal computer science foundation backing the production systems,
             product interfaces, and engineering leadership shown above.
