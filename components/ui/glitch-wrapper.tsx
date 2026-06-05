@@ -19,6 +19,8 @@ interface GlitchWrapperProps {
   chromatic?: boolean;
   /** Enable flicker effect */
   flicker?: boolean;
+  /** Register this element with the GlitchController for ambient bursts */
+  dataGlitch?: boolean;
 }
 
 const intensityClasses: Record<GlitchIntensity, string> = {
@@ -35,6 +37,7 @@ function GlitchWrapper({
   delayVariant,
   chromatic = false,
   flicker = false,
+  dataGlitch = false,
 }: GlitchWrapperProps) {
   const [randomGlitch, setRandomGlitch] = React.useState(false);
 
@@ -72,6 +75,7 @@ function GlitchWrapper({
 
   return (
     <div
+      data-glitch={dataGlitch ? "" : undefined}
       className={cn(
         "relative",
         glitchClass,
@@ -87,7 +91,7 @@ function GlitchWrapper({
 }
 
 // Glitch text component for inline text glitch effects
-interface GlitchTextProps {
+interface GlitchTextInlineProps {
   children: React.ReactNode;
   className?: string;
   as?: "span" | "p" | "h1" | "h2" | "h3" | "h4" | "div";
@@ -96,13 +100,13 @@ interface GlitchTextProps {
   dataText?: string;
 }
 
-function GlitchText({
+function GlitchTextInline({
   children,
   className,
   as: Component = "span",
   intensity = "normal",
   dataText,
-}: GlitchTextProps) {
+}: GlitchTextInlineProps) {
   const text = typeof children === "string" ? children : dataText;
 
   return (
@@ -148,10 +152,10 @@ function useRandomGlitch(baseInterval = 5000, variance = 3000) {
 
 export {
   GlitchWrapper,
-  GlitchText,
+  GlitchTextInline,
   useRandomGlitch,
   type GlitchWrapperProps,
-  type GlitchTextProps,
+  type GlitchTextInlineProps,
   type GlitchIntensity,
   type GlitchTrigger,
 };
