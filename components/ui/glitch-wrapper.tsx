@@ -36,7 +36,6 @@ function GlitchWrapper({
   chromatic = false,
   flicker = false,
 }: GlitchWrapperProps) {
-  const [isGlitching, setIsGlitching] = React.useState(trigger === "always");
   const [randomGlitch, setRandomGlitch] = React.useState(false);
 
   // Random glitch effect for "random" trigger
@@ -81,8 +80,6 @@ function GlitchWrapper({
         flicker && "flicker",
         className
       )}
-      onMouseEnter={trigger === "hover" ? () => setIsGlitching(true) : undefined}
-      onMouseLeave={trigger === "hover" ? () => setIsGlitching(false) : undefined}
     >
       {children}
     </div>

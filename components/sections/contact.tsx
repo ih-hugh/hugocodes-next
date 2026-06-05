@@ -2,202 +2,207 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { NeonText } from "@/components/ui/neon-text";
 import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
+import { NeonText } from "@/components/ui/neon-text";
 import { personalInfo } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Mail01Icon, Linkedin01Icon, Globe02Icon, NewTwitterIcon, GithubIcon } from "@hugeicons/core-free-icons";
+import {
+  GithubIcon,
+  Linkedin01Icon,
+  Mail01Icon,
+  NewTwitterIcon,
+} from "@hugeicons/core-free-icons";
 
-// Animation variants for scroll-triggered fade-in
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
+      staggerChildren: 0.14,
+      delayChildren: 0.08,
     },
   },
 } as const;
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 34, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
     transition: {
-      duration: 0.6,
+      duration: 0.7,
       ease: [0.25, 0.1, 0.25, 1],
     },
   },
 } as const;
 
-// Contact link configuration (replaced pink with cooler colors)
 const contactLinks = [
   {
     id: "email",
     label: "Email",
+    detail: personalInfo.email,
     icon: Mail01Icon,
     href: `mailto:${personalInfo.email}`,
-    color: "cyan",
+    color: "var(--neon-cyan)",
   },
   {
     id: "linkedin",
     label: "LinkedIn",
+    detail: personalInfo.linkedin,
     icon: Linkedin01Icon,
     href: `https://${personalInfo.linkedin}`,
-    color: "electric",
+    color: "var(--neon-electric)",
   },
   {
     id: "x",
     label: "X",
+    detail: "@ih_hugh",
     icon: NewTwitterIcon,
     href: "https://x.com/ih_hugh",
-    color: "ice",
+    color: "var(--neon-ice)",
   },
   {
     id: "github",
     label: "GitHub",
+    detail: "ih-hugh",
     icon: GithubIcon,
     href: "https://github.com/ih-hugh",
-    color: "purple",
+    color: "var(--neon-purple)",
   },
 ] as const;
 
-type NeonColor = "cyan" | "magenta" | "purple" | "green" | "orange" | "ice" | "electric" | "red";
-
-interface ContactLinkProps {
-  icon: typeof Mail01Icon;
-  label: string;
-  href: string;
-  color: NeonColor;
-}
-
-function ContactLink({ icon, label, href, color }: ContactLinkProps) {
-  const colorVar = `var(--neon-${color})`;
-
+function ContactLink({ link, index }: { link: (typeof contactLinks)[number]; index: number }) {
   return (
     <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex flex-col items-center gap-3 p-4 rounded-lg transition-all duration-300 glitch-on-hover"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      style={{
-        background: "rgba(10, 10, 15, 0.6)",
-      }}
+      href={link.href}
+      target={link.href.startsWith("http") ? "_blank" : undefined}
+      rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+      className="group relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-white/[0.035] p-4 text-left backdrop-blur-md transition-colors hover:border-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)]"
+      whileHover={{ y: -5, scale: 1.015 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 240, damping: 24 }}
     >
-      {/* Icon with neon glow on hover */}
       <div
-        className="relative p-4 rounded-full transition-all duration-300 group-hover:shadow-lg"
-        style={{
-          border: `2px solid ${colorVar}`,
-          boxShadow: `0 0 10px ${colorVar}40`,
-        }}
-      >
-        <HugeiconsIcon
-          icon={icon}
-          size={28}
-          strokeWidth={1.5}
-          className="transition-all duration-300"
-          style={{ color: colorVar }}
-        />
-        {/* Intensified glow on hover */}
+        className="absolute -right-10 -top-14 size-32 rounded-full opacity-45 blur-3xl transition-opacity duration-500 group-hover:opacity-80"
+        style={{ background: `color-mix(in oklch, ${link.color} 22%, transparent)` }}
+      />
+      <div className="relative z-10 flex items-center gap-4">
         <div
-          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-          style={{
-            boxShadow: `
-              0 0 15px ${colorVar},
-              0 0 30px ${colorVar},
-              0 0 45px ${colorVar}60
-            `,
-          }}
-        />
+          className="flex size-12 shrink-0 items-center justify-center rounded-2xl border bg-black/24"
+          style={{ borderColor: `color-mix(in oklch, ${link.color} 40%, transparent)` }}
+        >
+          <HugeiconsIcon icon={link.icon} size={24} strokeWidth={1.7} style={{ color: link.color }} />
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-white/35">
+              0{index + 1}
+            </span>
+            <span className="text-sm font-bold uppercase tracking-[0.12em] text-white">
+              {link.label}
+            </span>
+          </div>
+          <div className="mt-1 truncate text-sm text-white/52">{link.detail}</div>
+        </div>
       </div>
-
-      {/* Label */}
-      <span
-        className="text-sm font-medium transition-all duration-300 group-hover:text-white"
-        style={{ color: "rgba(255, 255, 255, 0.7)" }}
-      >
-        {label}
-      </span>
     </motion.a>
   );
 }
 
 function Contact() {
   const sectionRef = React.useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const isInView = useInView(sectionRef, { once: true, margin: "-120px" });
   const currentYear = new Date().getFullYear();
 
   return (
     <footer
       ref={sectionRef}
-      className="relative py-24 md:py-32 px-4"
+      className="relative px-4 py-24 sm:px-6 md:py-32 lg:px-8"
       style={{ backgroundColor: "transparent" }}
     >
+      <div
+        className="absolute inset-0 pointer-events-none opacity-80"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 18%, color-mix(in oklch, var(--neon-red) 10%, transparent), transparent 28%), radial-gradient(circle at 80% 72%, color-mix(in oklch, var(--neon-cyan) 10%, transparent), transparent 30%)",
+        }}
+      />
+
       <motion.div
-        className="max-w-4xl mx-auto"
+        className="relative z-10 mx-auto max-w-7xl"
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading with Glitch */}
-        <motion.div variants={itemVariants} className="text-center mb-12">
-          <GlitchWrapper intensity="subtle" trigger="random" delayVariant={5}>
-            <NeonText
-              as="h2"
-              color="red"
-              intensity="normal"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
-            >
-              Let&apos;s Connect
-            </NeonText>
-          </GlitchWrapper>
-        </motion.div>
-
-        {/* Contact Links */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 mb-16"
+          className="relative overflow-hidden rounded-[2rem] border border-[var(--neon-red)]/18 bg-[rgba(5,5,8,0.74)] p-6 shadow-[0_0_80px_rgba(255,60,60,0.06)] backdrop-blur-2xl sm:p-8 lg:p-10"
         >
-          {contactLinks.map((link) => (
-            <ContactLink
-              key={link.id}
-              icon={link.icon}
-              label={link.label}
-              href={link.href}
-              color={link.color as NeonColor}
-            />
-          ))}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--neon-red)] to-transparent opacity-70" />
+          <div
+            className="absolute inset-0 opacity-35"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+              maskImage:
+                "radial-gradient(circle at 52% 30%, black 0%, transparent 72%)",
+            }}
+          />
+
+          <div className="relative z-10 grid gap-9 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
+            <div>
+              <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-red)]/75">
+                Transmission endpoint
+              </div>
+              <GlitchWrapper intensity="subtle" trigger="random" delayVariant={5}>
+                <NeonText
+                  as="h2"
+                  color="red"
+                  intensity="normal"
+                  className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
+                >
+                  Let&apos;s Connect
+                </NeonText>
+              </GlitchWrapper>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">
+                Open to conversations around product engineering, AI-native
+                software, full-stack systems, and ambitious builds that need a
+                senior operator who can move across the whole stack.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href={`mailto:${personalInfo.email}`}
+                  className="inline-flex items-center justify-center rounded-full border border-[var(--neon-cyan)]/55 bg-[var(--neon-cyan)]/[0.07] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-[var(--neon-cyan)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)]"
+                >
+                  Send email
+                </a>
+                <a
+                  href="#hero"
+                  className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-white/58 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)]"
+                >
+                  Return top
+                </a>
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {contactLinks.map((link, index) => (
+                <ContactLink key={link.id} link={link} index={index} />
+              ))}
+            </div>
+          </div>
         </motion.div>
 
-        {/* Footer Copyright */}
         <motion.div
           variants={itemVariants}
-          className="text-center pt-8 border-t"
-          style={{ borderColor: "rgba(255, 255, 255, 0.1)" }}
+          className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-6 text-center font-mono text-xs uppercase tracking-[0.18em] text-white/30 sm:flex-row sm:items-center sm:justify-between sm:text-left"
         >
-          <p
-            className="text-sm"
-            style={{ color: "rgba(255, 255, 255, 0.5)" }}
-          >
+          <span>
             &copy; {currentYear} {personalInfo.name}. All rights reserved.
-          </p>
-          <p
-            className="text-xs mt-2"
-            style={{ color: "rgba(255, 255, 255, 0.3)" }}
-          >
-            Built with Next.js, TypeScript, and a lot of neon.
-          </p>
-          <p
-            className="text-xs mt-1"
-            style={{ color: "rgba(255, 255, 255, 0.2)" }}
-          >
-            Shipped faster with Ralph Wiggums Loop
-          </p>
+          </span>
+          <span>Built with Next.js, TypeScript, Three.js, and motion.</span>
         </motion.div>
       </motion.div>
     </footer>
