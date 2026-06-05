@@ -57,6 +57,7 @@ function getPrepared(text: string, font: string, letterSpacing: number) {
 
 interface Metrics {
   font: string;
+  fontSize: number;
   lineHeight: number;
   letterSpacing: number;
 }
@@ -72,7 +73,7 @@ function readMetrics(el: HTMLElement): Metrics {
     lhRaw === "normal" ? fontSize * 1.1 : parseFloat(lhRaw) || fontSize * 1.1;
   const letterSpacing =
     cs.letterSpacing === "normal" ? 0 : parseFloat(cs.letterSpacing) || 0;
-  return { font: `${weight} ${fontSize}px ${family}`, lineHeight, letterSpacing };
+  return { font: `${weight} ${fontSize}px ${family}`, fontSize, lineHeight, letterSpacing };
 }
 
 function GlitchText({
@@ -108,9 +109,15 @@ function GlitchText({
     const resolvedColor = getComputedStyle(sizer).color || "#5ff";
 
     let lines: { text: string }[] = [];
-    let metrics: Metrics = { font: "700 48px sans-serif", lineHeight: 56, letterSpacing: 0 };
+    let metrics: Metrics = { font: "700 48px sans-serif", fontSize: 48, lineHeight: 56, letterSpacing: 0 };
     let widthPx = 0;
     let heightPx = 0;
+    // Bitmap headroom (CSS px) so glyphs + RGB/slice displacement never clip.
+    let padX = 0;
+    let padY = 0;
+    let canvasW = 0;
+    let canvasH = 0;
+    let disposed = false;
 
     // decode state
     let decoding = decode;
@@ -125,13 +132,31 @@ function GlitchText({
       widthPx = Math.max(1, w);
       heightPx = Math.max(1, h);
       metrics = readMetrics(sizer);
+      // Pad the bitmap relative to font size: headroom for RGB-split + slice
+      // displacement and any glyph-metric drift.
+      padX = Math.ceil(metrics.fontSize * 0.3);
+      padY = Math.ceil(metrics.fontSize * 0.15);
       const prepared = getPrepared(text, metrics.font, metrics.letterSpacing);
-      const res = layoutWithLines(prepared, widthPx, metrics.lineHeight);
+      // Lay out with slack past the DOM box width: Pretext's canvas measureText
+      // can come out a hair wider than the inline-block box (esp. once the prod
+      // web font loads), which would otherwise wrap a single-line heading's last
+      // glyph onto an off-canvas second line ("Abou" / "Educatio").
+      const res = layoutWithLines(prepared, widthPx + padX, metrics.lineHeight);
       lines = res.lines;
-      canvas.width = Math.round(widthPx * dpr);
-      canvas.height = Math.round(heightPx * dpr);
-      canvas.style.width = `${widthPx}px`;
-      canvas.style.height = `${heightPx}px`;
+      // Size the bitmap to the ACTUAL measured text, not the DOM box, so the
+      // rendered glyphs always fit regardless of measurement drift.
+      let maxLineW = 0;
+      for (const ln of res.lines) if (ln.width > maxLineW) maxLineW = ln.width;
+      const contentW = Math.max(widthPx, Math.ceil(maxLineW));
+      canvasW = contentW + padX * 2;
+      canvasH = heightPx + padY * 2;
+      canvas.width = Math.round(canvasW * dpr);
+      canvas.height = Math.round(canvasH * dpr);
+      canvas.style.width = `${canvasW}px`;
+      canvas.style.height = `${canvasH}px`;
+      // Offset the (larger) canvas so the text still aligns with the DOM box.
+      canvas.style.left = `${-padX}px`;
+      canvas.style.top = `${-padY}px`;
     };
 
     const ro = new ResizeObserver((entries) => {
@@ -141,21 +166,32 @@ function GlitchText({
     ro.observe(sizer);
     relayout(sizer.clientWidth, sizer.clientHeight);
 
+    // Web fonts (next/font) often load AFTER first paint in production, changing
+    // glyph metrics. Re-measure once they're ready so canvas width matches the
+    // rendered text and the last glyph isn't clipped ("Abou" instead of "About").
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        if (!disposed) relayout(sizer.clientWidth, sizer.clientHeight);
+      });
+    }
+
     const drawLines = (offsetX: number, decodeProgress: number, seed: number) => {
       for (let i = 0; i < lines.length; i++) {
         const raw = lines[i].text;
         const str =
           decodeProgress < 1 ? computeScrambledText(raw, decodeProgress, seed + i) : raw;
-        const baseY = i * metrics.lineHeight + metrics.lineHeight * 0.74;
+        // Inset all drawing by the bitmap padding so it aligns with the DOM box.
+        const x = padX + offsetX;
+        const baseY = padY + i * metrics.lineHeight + metrics.lineHeight * 0.74;
         const j = 1.3;
         ctx.globalCompositeOperation = "lighter";
         ctx.fillStyle = "rgba(255,42,90,0.55)";
-        ctx.fillText(str, offsetX - j, baseY);
+        ctx.fillText(str, x - j, baseY);
         ctx.fillStyle = "rgba(0,240,255,0.55)";
-        ctx.fillText(str, offsetX + j, baseY);
+        ctx.fillText(str, x + j, baseY);
         ctx.globalCompositeOperation = "source-over";
         ctx.fillStyle = resolvedColor;
-        ctx.fillText(str, offsetX, baseY);
+        ctx.fillText(str, x, baseY);
       }
     };
 
@@ -183,7 +219,7 @@ function GlitchText({
       }
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, widthPx, heightPx);
+      ctx.clearRect(0, 0, canvasW, canvasH);
       ctx.font = metrics.font;
       ctx.textBaseline = "alphabetic";
       // letterSpacing is supported in modern canvas contexts
@@ -198,14 +234,14 @@ function GlitchText({
       if (bursting) {
         const slices = 3;
         for (let k = 0; k < slices; k++) {
-          const sy = Math.random() * heightPx;
+          const sy = Math.random() * canvasH;
           const sh = 2 + Math.random() * 10;
           const sdx = (Math.random() * 2 - 1) * (8 + Math.random() * 18);
           ctx.save();
           ctx.beginPath();
-          ctx.rect(0, sy, widthPx, sh);
+          ctx.rect(0, sy, canvasW, sh);
           ctx.clip();
-          ctx.clearRect(0, sy, widthPx, sh);
+          ctx.clearRect(0, sy, canvasW, sh);
           drawLines(sdx, decodeProgress, 1337);
           ctx.restore();
         }
@@ -236,6 +272,7 @@ function GlitchText({
     raf = requestAnimationFrame(frame);
 
     return () => {
+      disposed = true;
       running = false;
       cancelAnimationFrame(raf);
       ro.disconnect();

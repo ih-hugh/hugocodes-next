@@ -39,6 +39,7 @@ export interface Skill {
   category: string;
   skills: string[];
   proficiency: number;
+  blurb: string;
 }
 
 export interface Education {
@@ -274,42 +275,56 @@ export const skills: Skill[] = [
     category: "Frontend",
     skills: ["HTML5", "CSS3/SASS", "JavaScript/TypeScript", "React/Next.js", "Vue/Nuxt"],
     proficiency: 95,
+    blurb:
+      "A decade shipping production UIs — React/Next.js and Vue/Nuxt apps, reusable component libraries, and accessible WCAG/ARIA interfaces.",
   },
   {
     id: "backend",
     category: "Backend",
     skills: ["Node.js (Express, NestJS)", "ColdFusion (CFML/CFScript)", "REST", "GraphQL"],
     proficiency: 90,
+    blurb:
+      "REST and GraphQL services on Node (Express, NestJS) and enterprise ColdFusion/CFML, including real-time WebSocket and streaming APIs.",
   },
   {
     id: "data",
     category: "Data",
     skills: ["MongoDB", "MySQL", "PostgreSQL", "Couchbase"],
     proficiency: 85,
+    blurb:
+      "Relational and document stores in production — PostgreSQL with row-level security, plus MongoDB, MySQL, and Couchbase migrations.",
   },
   {
     id: "cloud-devops",
     category: "Cloud/DevOps",
     skills: ["Supabase", "AWS", "Docker", "Heroku", "Vercel", "Netlify"],
     proficiency: 75,
+    blurb:
+      "Shipping on AWS (Bedrock, S3, Lambda), Supabase, and Vercel — Docker builds, CI/CD pipelines, and serverless edge deployments.",
   },
   {
     id: "practices",
     category: "Practices",
     skills: ["TDD", "Functional Programming", "Software Design", "MVC", "Microservices", "Serverless"],
     proficiency: 80,
+    blurb:
+      "Test-driven development, microservices, and serverless patterns grounded in deliberate software design and MVC.",
   },
   {
     id: "soft-skills",
     category: "Soft Skills",
     skills: ["Strong communicator/conversationalist"],
     proficiency: 90,
+    blurb:
+      "Clear communicator leading cross-team platform work — translating complex systems into shared understanding and momentum.",
   },
   {
     id: "marketing",
     category: "Marketing",
     skills: ["SEO", "SEM", "Social Media", "Content Marketing", "Email Marketing", "Analytics", "Copywriting"],
     proficiency: 45,
+    blurb:
+      "Hands-on growth for my own SaaS products — SEO/SEM, analytics, content, and lifecycle email to reach early users.",
   },
 
 ];

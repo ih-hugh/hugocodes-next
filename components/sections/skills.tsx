@@ -120,8 +120,7 @@ function SkillCluster({ skill, index }: { skill: Skill; index: number }) {
             </span>
           </div>
           <p className="mb-5 text-sm leading-7 text-white/52">
-            Proficiency cluster calibrated from production usage, ownership, and
-            delivery depth.
+            {skill.blurb}
           </p>
           <div className="flex flex-wrap gap-2">
             {skill.skills.map((name, skillIndex) => (
