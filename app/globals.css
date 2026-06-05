@@ -525,8 +525,8 @@
 /* Global glitch class - applies random glitch effect */
 .glitch-random {
   animation:
-    glitch-intense 8s infinite,
-    flicker 12s infinite;
+    glitch-intense 4s infinite,
+    flicker 9s infinite;
 }
 
 /* Subtle version for backgrounds and less important elements */
@@ -555,6 +555,57 @@
 .glitch-delay-3 { animation-delay: 2.1s; }
 .glitch-delay-4 { animation-delay: 3.3s; }
 .glitch-delay-5 { animation-delay: 4.7s; }
+
+/* =================================
+   ORCHESTRATED BURST (any element)
+   ================================= */
+
+@keyframes glitch-burst-anim {
+  0% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+    text-shadow: none;
+    filter: none;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    clip-path: inset(20% 0 40% 0);
+    text-shadow: 2px 0 var(--neon-cyan), -2px 0 var(--neon-red);
+    filter: brightness(1.15);
+  }
+  40% {
+    transform: translate(2px, -1px);
+    clip-path: inset(58% 0 12% 0);
+    text-shadow: -3px 0 var(--neon-magenta), 3px 0 var(--neon-electric);
+  }
+  60% {
+    transform: translate(-1px, 0);
+    clip-path: inset(34% 0 36% 0);
+    text-shadow: 2px 0 var(--neon-cyan), -2px 0 var(--neon-red);
+  }
+  80% {
+    transform: translate(1px, 1px);
+    clip-path: inset(8% 0 62% 0);
+    text-shadow: none;
+  }
+  100% {
+    transform: translate(0);
+    clip-path: inset(0 0 0 0);
+    text-shadow: none;
+    filter: none;
+  }
+}
+
+/* Transient class toggled by GlitchController on [data-glitch] elements. */
+.glitch-burst {
+  animation: glitch-burst-anim 0.36s ease-in-out;
+  will-change: transform, clip-path, filter;
+}
+
+/* Gentle always-on hint so [data-glitch] elements feel "live" between bursts. */
+[data-glitch] {
+  position: relative;
+}
 
 /* Neon ice glow effect */
 .neon-glow-ice {
@@ -795,4 +846,23 @@
 
 .circuit-node-pulse {
   animation: circuit-node-pulse 2s ease-in-out infinite;
+}
+
+/* =================================
+   ACCESSIBILITY: REDUCED MOTION
+   ================================= */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-random,
+  .glitch-subtle,
+  .glitch-heavy,
+  .glitch-on-hover:hover,
+  .chromatic-glitch,
+  .flicker,
+  .glitch-burst {
+    animation: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    clip-path: none !important;
+    transform: none !important;
+  }
 }
