@@ -1,17 +1,3 @@
-export interface Rectish {
-  top: number;
-  bottom: number;
-}
-
-/** True if [top, bottom] overlaps [-margin, viewportHeight + margin]. */
-export function isInViewport(
-  rect: Rectish,
-  viewportHeight: number,
-  margin = 0,
-): boolean {
-  return rect.bottom > -margin && rect.top < viewportHeight + margin;
-}
-
 /**
  * Pick up to `count` distinct items using an injected RNG (Fisher–Yates partial
  * shuffle on a copy). Deterministic given a deterministic `rng`.

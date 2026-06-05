@@ -1,21 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isInViewport, pickRandom } from "./viewport";
-
-describe("isInViewport", () => {
-  const vh = 800;
-  it("is false when fully above the viewport", () => {
-    expect(isInViewport({ top: -200, bottom: -50 }, vh)).toBe(false);
-  });
-  it("is false when fully below the viewport", () => {
-    expect(isInViewport({ top: 900, bottom: 1000 }, vh)).toBe(false);
-  });
-  it("is true when overlapping the viewport", () => {
-    expect(isInViewport({ top: 100, bottom: 300 }, vh)).toBe(true);
-  });
-  it("respects a margin", () => {
-    expect(isInViewport({ top: 820, bottom: 900 }, vh, 50)).toBe(true);
-  });
-});
+import { pickRandom } from "./viewport";
 
 describe("pickRandom", () => {
   it("returns at most `count` items", () => {
