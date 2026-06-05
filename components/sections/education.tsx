@@ -2,160 +2,157 @@
 
 import * as React from "react";
 import { motion, useInView } from "framer-motion";
-import { NeonText } from "@/components/ui/neon-text";
-import { HolographicCard } from "@/components/ui/holographic-card";
 import { GlitchWrapper } from "@/components/ui/glitch-wrapper";
-import { education } from "@/lib/resume-data";
+import { NeonText } from "@/components/ui/neon-text";
+import { education, type Education as EducationData } from "@/lib/resume-data";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { UniversityIcon, GraduateMaleIcon } from "@hugeicons/core-free-icons";
+import { GraduateMaleIcon, UniversityIcon } from "@hugeicons/core-free-icons";
 
-// Animation variants for scroll-triggered fade-in
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
+      staggerChildren: 0.14,
+      delayChildren: 0.08,
     },
   },
 } as const;
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 34, filter: "blur(8px)" },
   visible: {
     opacity: 1,
     y: 0,
+    filter: "blur(0px)",
     transition: {
-      duration: 0.6,
+      duration: 0.7,
       ease: [0.25, 0.1, 0.25, 1],
     },
   },
 } as const;
 
-// Map institution IDs to icons
-const institutionIconMap: Record<string, typeof UniversityIcon> = {
-  fiu: UniversityIcon,
-  mdc: GraduateMaleIcon,
+const credentialMeta: Record<
+  string,
+  { icon: typeof UniversityIcon; color: string; signal: string }
+> = {
+  fiu: {
+    icon: UniversityIcon,
+    color: "var(--neon-green)",
+    signal: "Core degree",
+  },
+  mdc: {
+    icon: GraduateMaleIcon,
+    color: "var(--neon-ice)",
+    signal: "Foundation",
+  },
 };
 
-// Map institution IDs to neon colors for variety (cooler colors)
-const institutionColorMap: Record<string, "cyan" | "electric" | "purple" | "ice"> = {
-  fiu: "electric",
-  mdc: "ice",
-};
-
-interface EducationCardProps {
-  institution: string;
-  degree: string;
-  field: string;
-  location: string;
-  year: number;
-  id: string;
-}
-
-function EducationCard({ institution, degree, field, location, year, id }: EducationCardProps) {
-  const icon = institutionIconMap[id] || UniversityIcon;
-  const color = institutionColorMap[id] || "cyan";
-  const colorVar = `var(--neon-${color})`;
+function CredentialNode({ credential, index }: { credential: EducationData; index: number }) {
+  const meta = credentialMeta[credential.id] ?? credentialMeta.fiu;
 
   return (
-    <HolographicCard
-      hoverEffect={true}
-      className="flex-1 min-w-0 sm:min-w-[340px] glitch-on-hover"
+    <motion.article
+      variants={itemVariants}
+      className="group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-[rgba(5,5,8,0.64)] p-5 backdrop-blur-xl transition-colors hover:border-white/20 sm:p-6"
+      whileHover={{ y: -5, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 240, damping: 24 }}
     >
-      <div className="flex items-start gap-4">
-        {/* Icon */}
-        <div
-          className="p-3 rounded-lg shrink-0"
-          style={{
-            background: `rgba(${color === "cyan" ? "0, 255, 255" : color === "purple" ? "180, 0, 255" : "255, 0, 255"}, 0.1)`,
-            border: `1px solid ${colorVar}`,
-            boxShadow: `0 0 10px ${colorVar}40`,
-          }}
-        >
-          <HugeiconsIcon
-            icon={icon}
-            size={24}
-            strokeWidth={1.5}
-            style={{ color: colorVar }}
+      <div
+        className="absolute -right-12 -top-16 size-44 rounded-full opacity-55 blur-3xl transition-opacity duration-500 group-hover:opacity-85"
+        style={{ background: `color-mix(in oklch, ${meta.color} 18%, transparent)` }}
+      />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-45" />
+
+      <div className="relative z-10 flex items-start gap-5">
+        <div className="relative flex size-16 shrink-0 items-center justify-center rounded-2xl border bg-black/28 sm:size-20" style={{ borderColor: `color-mix(in oklch, ${meta.color} 44%, transparent)` }}>
+          <motion.div
+            className="absolute inset-0 rounded-2xl border border-white/10"
+            animate={{ rotate: [0, 2, -2, 0] }}
+            transition={{ duration: 4 + index, repeat: Infinity, ease: "easeInOut" }}
           />
+          <HugeiconsIcon icon={meta.icon} size={28} strokeWidth={1.6} style={{ color: meta.color }} />
         </div>
 
-        {/* Content */}
-        <div className="flex-1">
-          <NeonText
-            as="h3"
-            color={color}
-            intensity="subtle"
-            animate={false}
-            className="text-base sm:text-lg font-semibold"
-          >
-            {institution}
-          </NeonText>
-          <p
-            className="text-sm mt-1"
-            style={{ color: "rgba(255, 255, 255, 0.7)" }}
-          >
-            {degree} {field}
+        <div className="min-w-0 flex-1">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span
+              className="rounded-full border px-3 py-1.5 font-mono text-[0.65rem] font-bold uppercase tracking-[0.2em]"
+              style={{
+                borderColor: `color-mix(in oklch, ${meta.color} 34%, transparent)`,
+                color: meta.color,
+                background: `color-mix(in oklch, ${meta.color} 8%, transparent)`,
+              }}
+            >
+              {meta.signal}
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/36">
+              {credential.year}
+            </span>
+          </div>
+
+          <h3 className="text-xl font-black uppercase tracking-[-0.035em] text-white sm:text-2xl">
+            {credential.institution}
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-white/62">
+            {credential.degree} in {credential.field}
           </p>
-          <p
-            className="text-sm font-mono mt-2"
-            style={{ color: colorVar, opacity: 0.8 }}
-          >
-            {year}
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-white/34">
+            {credential.location}
           </p>
         </div>
       </div>
-    </HolographicCard>
+    </motion.article>
   );
 }
 
 function Education() {
   const sectionRef = React.useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const isInView = useInView(sectionRef, { once: true, margin: "-120px" });
 
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 md:py-32 px-4"
+      className="relative px-4 py-24 sm:px-6 md:py-32 lg:px-8"
       style={{ backgroundColor: "transparent" }}
     >
+      <div
+        className="absolute inset-0 pointer-events-none opacity-70"
+        style={{
+          background:
+            "radial-gradient(circle at 78% 24%, color-mix(in oklch, var(--neon-green) 12%, transparent), transparent 28%), radial-gradient(circle at 18% 66%, color-mix(in oklch, var(--neon-ice) 10%, transparent), transparent 24%)",
+        }}
+      />
+
       <motion.div
-        className="max-w-5xl mx-auto"
+        className="relative z-10 mx-auto max-w-7xl"
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {/* Section Heading with Glitch */}
-        <motion.div variants={itemVariants} className="mb-12">
+        <motion.div variants={itemVariants} className="mb-12 max-w-4xl">
+          <div className="mb-4 font-mono text-xs uppercase tracking-[0.32em] text-[var(--neon-green)]/75">
+            Credentials
+          </div>
           <GlitchWrapper intensity="subtle" trigger="random" delayVariant={3}>
             <NeonText
               as="h2"
               color="green"
               intensity="normal"
-              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase"
+              className="text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
             >
               Education
             </NeonText>
           </GlitchWrapper>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
+            Formal computer science foundation backing the production systems,
+            product interfaces, and engineering leadership shown above.
+          </p>
         </motion.div>
 
-        {/* Education Cards Grid */}
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row gap-6"
-        >
-          {education.map((edu) => (
-            <EducationCard
-              key={edu.id}
-              id={edu.id}
-              institution={edu.institution}
-              degree={edu.degree}
-              field={edu.field}
-              location={edu.location}
-              year={edu.year}
-            />
+        <motion.div variants={containerVariants} className="grid gap-5 md:grid-cols-2">
+          {education.map((credential, index) => (
+            <CredentialNode key={credential.id} credential={credential} index={index} />
           ))}
         </motion.div>
       </motion.div>
