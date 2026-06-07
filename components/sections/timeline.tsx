@@ -44,7 +44,7 @@ function formatDates(job: Job) {
 
 function getVisibleDescriptions(job: Job, index: number) {
   if (job.isCurrent) {
-    return job.description.slice(0, 4);
+    return job.description;
   }
 
   return job.description.slice(0, index < 4 ? 3 : 2);
