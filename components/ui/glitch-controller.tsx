@@ -47,9 +47,9 @@ function GlitchController() {
         const count = 1 + Math.floor(Math.random() * 2); // 1–2 at a time
         for (const el of pickRandom(pool, count, Math.random)) burst(el);
       }
-      timer = window.setTimeout(tick, 1200 + Math.random() * 2200);
+      timer = window.setTimeout(tick, 2200 + Math.random() * 3000);
     };
-    timer = window.setTimeout(tick, 1500);
+    timer = window.setTimeout(tick, 2500);
 
     return () => {
       io.disconnect();
