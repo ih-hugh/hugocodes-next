@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hugo Cedano | Software Engineer",
-  description: "Software Engineer with expertise in building scalable web applications, leading engineering teams, and delivering high-quality software solutions. Specializing in React, TypeScript, and modern web technologies.",
+  title: "Hugo Cedano | Software Engineer & Founder",
+  description: "Software engineer and founder of Frontier Tech Solutions LLC, building BytFrontier as the flagship user-facing brand for practical AI-native products, agents, and full-stack systems.",
   openGraph: {
-    title: "Hugo Cedano | Software Engineer",
-    description: "Software Engineer with expertise in building scalable web applications, leading engineering teams, and delivering high-quality software solutions.",
+    title: "Hugo Cedano | Software Engineer & Founder",
+    description: "Software engineer and founder of Frontier Tech Solutions LLC, building BytFrontier as the flagship user-facing brand for practical AI-native products.",
     type: "website",
   },
 };

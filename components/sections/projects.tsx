@@ -30,10 +30,10 @@ const itemVariants = {
   },
 } as const;
 
-const signalMetrics = [
-  { label: "Market feed", value: "Realtime" },
-  { label: "Research", value: "AI reports" },
-  { label: "Delivery", value: "Multi-channel" },
+const flagshipSignals = [
+  { label: "LLC shell", value: "Frontier Tech" },
+  { label: "Public brand", value: "BytFrontier" },
+  { label: "Portfolio", value: "3 products" },
 ] as const;
 
 const projectColors = [
@@ -73,23 +73,24 @@ function TechBadge({ tech, index, compact = false }: TechBadgeProps) {
 }
 
 function StatusPill({ project }: { project: Project }) {
-  const isLive = Boolean(project.url);
+  const statusMeta = {
+    live: { label: "Live", color: "var(--neon-green)" },
+    "private-alpha": { label: "Private alpha", color: "var(--neon-electric)" },
+    "in-development": { label: "In development", color: "var(--neon-purple)" },
+  } satisfies Record<Project["status"], { label: string; color: string }>;
+  const meta = statusMeta[project.status];
 
   return (
     <span
       className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[0.66rem] font-bold uppercase tracking-[0.2em]"
       style={{
-        background: isLive
-          ? "color-mix(in oklch, var(--neon-green) 10%, transparent)"
-          : "color-mix(in oklch, var(--neon-purple) 12%, transparent)",
-        borderColor: isLive
-          ? "color-mix(in oklch, var(--neon-green) 42%, transparent)"
-          : "color-mix(in oklch, var(--neon-purple) 42%, transparent)",
-        color: isLive ? "var(--neon-green)" : "var(--neon-purple)",
+        background: `color-mix(in oklch, ${meta.color} 10%, transparent)`,
+        borderColor: `color-mix(in oklch, ${meta.color} 42%, transparent)`,
+        color: meta.color,
       }}
     >
       <span className="size-1.5 rounded-full bg-current shadow-[0_0_10px_currentColor]" />
-      {isLive ? "Live" : "Building"}
+      {meta.label}
     </span>
   );
 }
@@ -119,7 +120,7 @@ function FlagshipProject({ project }: { project: Project }) {
           <div className="mb-5 flex flex-wrap items-center gap-3">
             <StatusPill project={project} />
             <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 font-mono text-[0.66rem] font-bold uppercase tracking-[0.2em] text-white/42">
-              Flagship build
+              {project.category}
             </span>
           </div>
 
@@ -176,13 +177,13 @@ function FlagshipProject({ project }: { project: Project }) {
           <div className="relative z-10 grid h-full content-between gap-4">
             <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/38 p-3 backdrop-blur-md">
               <span className="font-mono text-xs uppercase tracking-[0.24em] text-[var(--neon-cyan)]">
-                Intelligence core
+                Brand command
               </span>
-              <span className="font-mono text-xs text-white/34">v1.0</span>
+              <span className="font-mono text-xs text-white/34">LLC</span>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {signalMetrics.map((metric, index) => (
+              {flagshipSignals.map((metric, index) => (
                 <motion.div
                   key={metric.label}
                   className="rounded-2xl border border-white/10 bg-black/42 p-4 backdrop-blur-md"
@@ -225,7 +226,11 @@ function FlagshipProject({ project }: { project: Project }) {
 
 function ProductModule({ project, index }: { project: Project; index: number }) {
   const color = projectColors[index % projectColors.length];
-  const isLive = Boolean(project.url);
+  const statusLabel = {
+    live: "Live",
+    "private-alpha": "Private alpha",
+    "in-development": "In build",
+  } satisfies Record<Project["status"], string>;
 
   const content = (
     <motion.article
@@ -250,10 +255,10 @@ function ProductModule({ project, index }: { project: Project; index: number }) 
               background: `color-mix(in oklch, ${color} 9%, transparent)`,
             }}
           >
-            Product 0{index + 1}
+            {project.category}
           </span>
           <span className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-white/32">
-            {isLive ? "Live" : "In build"}
+            {statusLabel[project.status]}
           </span>
         </div>
 
@@ -303,8 +308,8 @@ function ProductModule({ project, index }: { project: Project; index: number }) 
 function Projects() {
   const sectionRef = React.useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-120px" });
-  const flagshipProject = projects.find((project) => project.id === "frontier-terminal");
-  const productModules = projects.filter((project) => project.id !== "frontier-terminal");
+  const flagshipProject = projects.find((project) => project.id === "bytfrontier");
+  const productModules = projects.filter((project) => project.id !== "bytfrontier");
 
   return (
     <section
@@ -337,9 +342,9 @@ function Projects() {
             className="block text-4xl font-black uppercase tracking-[-0.06em] sm:text-5xl md:text-7xl"
           />
           <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58 sm:text-base">
-            Products built as operating systems: commerce, mobile guidance,
-            financial intelligence, agent workflows, realtime delivery, and full
-            production ownership.
+            BytFrontier is the flagship effort: the public brand for Frontier
+            Tech Solutions LLC and the umbrella for Iris, MacroCrafter, and
+            Frontier Terminal. TheWay remains a faith project in development.
           </p>
         </motion.div>
 

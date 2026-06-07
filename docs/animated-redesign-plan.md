@@ -14,7 +14,7 @@
 - Styling is Tailwind CSS 4 plus cyberpunk CSS variables and custom keyframes in `app/globals.css`.
 - Animation runtime is currently `framer-motion` plus CSS keyframes.
 - No Three.js, React Three Fiber, shader, or WebGL dependencies are installed yet.
-- `origin/main` includes the new `Frontier Terminal` featured project and a `bun.lock`, but `package.json` still declares `pnpm@9.15.4`. Use `pnpm` unless we intentionally migrate package managers.
+- `origin/main` has been moving the Projects section toward a product-house hierarchy; use `BytFrontier` as the flagship card, then nest `Iris`, `MacroCrafter`, and `Frontier Terminal` under it. `package.json` declares `pnpm@9.15.4`; use `pnpm` unless we intentionally migrate package managers.
 
 ## Creative Direction
 
@@ -50,8 +50,9 @@ The portfolio content remains real DOM text. Three.js provides the ambient spati
 ### Projects
 
 - Featured project hierarchy:
-  - `Frontier Terminal` as a wide cinematic intelligence-console card.
-  - `MacroCrafter` and `TheWay` as secondary product modules.
+  - `BytFrontier` as the wide flagship card and user-facing brand for Frontier Tech Solutions LLC.
+  - `Iris`, `MacroCrafter`, and `Frontier Terminal` as BytFrontier product modules.
+  - `TheWay` as a separate faith project in development.
 - Cards should have animated scanlines, light sweep, hover tilt, and deep-link affordances.
 - Tech stacks become animated chips or grouped system tags.
 
@@ -193,14 +194,14 @@ Acceptance checks:
 
 ### Phase 4: Project Showcase
 
-- Redesign `Projects` with `Frontier Terminal` as a featured wide card.
+- Redesign `Projects` with `BytFrontier` as the featured wide card and the LLC-centered flagship effort.
 - Add animated product modules and better project hierarchy.
 - Add hover/focus affordances for external links.
 
 Acceptance checks:
 
 - External links are obvious and accessible.
-- `Frontier Terminal` reads as the newest flagship project.
+- `BytFrontier` reads as the flagship build, with Iris, MacroCrafter, and Frontier Terminal clearly nested under it and TheWay marked as a separate faith project.
 - Tech tags do not overwhelm the card copy.
 
 ### Phase 5: Experience And Skills
