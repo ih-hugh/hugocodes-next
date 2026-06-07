@@ -29,6 +29,8 @@ export interface Project {
   id: string;
   name: string;
   url?: string;
+  category: string;
+  status: "live" | "private-alpha" | "in-development";
   description: string;
   techStack: string[];
   featured: boolean;
@@ -69,7 +71,7 @@ export const personalInfo: PersonalInfo = {
 // About / Summary
 // ============================================================================
 
-export const aboutSummary = `Full-stack engineer with 10+ years building web applications across fintech, insurance, and e-commerce. I work across the entire stack—React, Vue, Next.js, Node.js, PostgreSQL, AWS, Supabase—and I've embraced AI-assisted development as a force multiplier. The future of software is agentic, and I'm already there: using AI tools to ship faster, iterate smarter, and focus on solving problems that lead to impact and growth, while worrying less about the noise that sometimes stagnates progress.`;
+export const aboutSummary = `Full-stack engineer and founder of Frontier Tech Solutions LLC, where I'm building BytFrontier as the user-facing flagship brand for practical AI-native products. I work across the entire stack—React, Vue, Next.js, Node.js, PostgreSQL, AWS, Supabase—and use AI-assisted development as a force multiplier to ship faster, iterate smarter, and turn frontier capability into real systems people can use.`;
 
 // ============================================================================
 // Featured Projects
@@ -77,29 +79,46 @@ export const aboutSummary = `Full-stack engineer with 10+ years building web app
 
 export const projects: Project[] = [
   {
-    id: "macrocrafter",
-    name: "MacroCrafter",
-    url: "https://macrocrafter.io",
+    id: "bytfrontier",
+    name: "BytFrontier",
+    url: "https://bytfrontier.com",
+    category: "Flagship build · Frontier Tech Solutions LLC",
+    status: "live",
     description:
-      "AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV gaming communities. Full-stack application featuring real-time streaming chat with multiple LLM providers (xAI Grok, OpenAI), three-tier Stripe subscription system with webhook lifecycle management, and secure multi-tenant architecture using Supabase Auth with PostgreSQL Row-Level Security.",
-    techStack: ["Next.js 16", "React 19", "TypeScript", "Supabase (PostgreSQL)", "Redis", "Stripe", "Vercel AI SDK", "Radix UI", "Tailwind CSS", "Playwright", "Jest", "GitHub Actions", "Docker"],
+      "The user-facing flagship brand for Frontier Tech Solutions LLC: a product house and implementation shell for AI-native systems. BytFrontier is the umbrella that houses Iris, MacroCrafter, and Frontier Terminal while keeping the LLC's public story focused around practical AI products, brand trust, and shipped systems.",
+    techStack: ["Next.js 16", "React 19", "TypeScript", "Brand System", "GTM", "AI Agents", "SaaS Ops", "Vercel", "Supabase", "Composio", "Hermes Agent"],
     featured: true,
   },
   {
-    id: "theway",
-    name: "TheWay",
-    url: undefined,
+    id: "iris",
+    name: "Iris",
+    url: "https://iris.bytfrontier.com",
+    category: "BytFrontier product · Personal AI infrastructure",
+    status: "private-alpha",
     description:
-      "AI-powered mobile app guiding users through personalized spiritual journeys with daily devotionals, Orthodox calendar integration, and an intelligent conversational assistant. Features include a full 76-book Orthodox Bible reader with annotations, AI-generated liturgical imagery, gamified progression system, and adaptive onboarding that tailors guidance to each user's spiritual maturity level.",
-    techStack: ["React Native", "Expo Router", "NativeWind", "Legend State", "NestJS", "Supabase (PostgreSQL, Edge Functions, Realtime, Auth)", "Letta AI", "Google Gemini API", "TypeScript"],
+      "Newest BytFrontier product in build: a dedicated AI agent provisioned per user through Telegram, with connected tool access, sovereign per-user state, and practical workflows that move from chat to action without another dashboard.",
+    techStack: ["Hermes Agent", "Telegram", "Composio", "Next.js", "TypeScript", "Supabase", "OAuth", "Agent Memory", "Integrations"],
+    featured: true,
+  },
+  {
+    id: "macrocrafter",
+    name: "MacroCrafter",
+    url: "https://macrocrafter.io",
+    category: "BytFrontier product · Gaming SaaS",
+    status: "live",
+    description:
+      "AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV communities. MacroCrafter is the specialist gaming product under BytFrontier, proving niche workflow depth through streaming LLM chat, subscriptions, and secure multi-tenant infrastructure.",
+    techStack: ["Next.js 16", "React 19", "TypeScript", "Supabase (PostgreSQL)", "Redis", "Stripe", "Vercel AI SDK", "Radix UI", "Tailwind CSS", "Playwright", "Jest", "GitHub Actions", "Docker"],
     featured: true,
   },
   {
     id: "frontier-terminal",
     name: "Frontier Terminal",
     url: "https://frontier-terminal.com",
+    category: "BytFrontier product · Market intelligence",
+    status: "live",
     description:
-      "AI-native financial intelligence platform built as a Bloomberg Terminal alternative for retail investors. Features real-time market data, AI-powered research reports, personalized daily briefings, multi-channel alert delivery (Telegram, Discord, email, webhooks), a conversational AI analyst with persistent portfolio memory, and a multi-agent backend architecture for continuous intelligence delivery.",
+      "Market-intelligence product under the BytFrontier umbrella, built for AI-assisted research, personalized briefings, multi-channel alert delivery, and persistent analyst memory. Frontier Terminal remains a strong portfolio proof point, but no longer carries the flagship role alone.",
     techStack: [
       "Next.js 16",
       "React 19",
@@ -112,6 +131,17 @@ export const projects: Project[] = [
       "Fly.io",
       "GitHub Actions",
     ],
+    featured: true,
+  },
+  {
+    id: "theway",
+    name: "TheWay",
+    url: undefined,
+    category: "Faith project · In development",
+    status: "in-development",
+    description:
+      "Faith-centered mobile app in development, separate from the BytFrontier product umbrella. TheWay explores Orthodox Christian spiritual formation through daily guidance, liturgical context, Bible reading, and reflective progression without being positioned as the LLC's flagship commercial build.",
+    techStack: ["React Native", "Expo Router", "NativeWind", "Legend State", "NestJS", "Supabase (PostgreSQL, Edge Functions, Realtime, Auth)", "Letta AI", "Google Gemini API", "TypeScript"],
     featured: true,
   },
 ];
@@ -145,9 +175,12 @@ export const jobs: Job[] = [
     endDate: "Current",
     isCurrent: true,
     description: [
-      "MacroCrafter: AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV gaming communities. Full-stack application featuring real-time streaming chat with multiple LLM providers (xAI Grok, OpenAI), three-tier Stripe subscription system with webhook lifecycle management, and secure multi-tenant architecture using Supabase Auth with PostgreSQL Row-Level Security.",
-      "TheWay: AI-powered mobile app guiding users through personalized spiritual journeys with daily devotionals, Orthodox calendar integration, and an intelligent conversational assistant. Features include a full 76-book Orthodox Bible reader with annotations, AI-generated liturgical imagery, gamified progression system, and adaptive onboarding that tailors guidance to each user's spiritual maturity level.",
-      "Frontier Terminal: AI-native financial intelligence platform and Bloomberg Terminal alternative for retail investors. Built multi-agent backend architecture delivering real-time market data, AI research reports, personalized daily briefings, and multi-channel alert delivery (Telegram, Discord, email, custom webhooks) with conversational AI analyst and persistent portfolio memory.",
+      "Founded Frontier Tech Solutions LLC and am developing BytFrontier as the user-facing flagship brand: a product house and implementation shell for AI-native SaaS, agents, automations, and integrations.",
+      "BytFrontier portfolio: Iris as the newest personal AI infrastructure product, MacroCrafter as the gaming workflow SaaS, and Frontier Terminal as the market-intelligence product — distinct products under one coherent LLC story.",
+      "Iris: Telegram-native dedicated AI agent in build, provisioned per user with connected tool access, sovereign state, and workflows that move from chat to action through integrations.",
+      "MacroCrafter: AI-powered macro generation SaaS for World of Warcraft and Final Fantasy XIV communities, with streaming LLM chat, subscriptions, and secure multi-tenant Supabase infrastructure.",
+      "Frontier Terminal: AI-assisted market-intelligence product delivering research context, personalized briefings, multi-channel alerts, and persistent analyst memory.",
+      "TheWay: faith-centered Orthodox Christian mobile app in development, kept as a separate spiritual formation project rather than the flagship LLC commercial brand.",
     ],
   },
   {
