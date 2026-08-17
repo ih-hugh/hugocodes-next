@@ -56,9 +56,9 @@ const contactLinks = [
   {
     id: "x",
     label: "X",
-    detail: "@ih_hugh",
+    detail: "@hugocoded",
     icon: NewTwitterIcon,
-    href: "https://x.com/ih_hugh",
+    href: "https://x.com/hugocoded",
     color: "var(--neon-ice)",
   },
   {
