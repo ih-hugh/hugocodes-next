@@ -41,6 +41,7 @@ const FLOOR_JITTER = [
 
 const DIM_COLOR = new THREE.Color("#1bd7ff");
 const LIT_COLOR = new THREE.Color("#00f5ff");
+const FLARE_COLOR = new THREE.Color("#ffc76a");
 const BEACON_COLOR = "#ffc76a";
 
 function seededRandom(seed: number) {
@@ -48,8 +49,8 @@ function seededRandom(seed: number) {
   return value - Math.floor(value);
 }
 
-function easeInOutCubic(t: number) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
 }
 
 interface AscentRefs {
@@ -131,7 +132,7 @@ function AscentDriver({
     // Scan sweep: timeline-driven during the intro, fast catch-up after a skip.
     if (phase !== "live") {
       const elapsed = (time - startRef.current) * 1000;
-      const progress = easeInOutCubic(clamp01(elapsed / (INTRO_TOTAL_MS * 0.92)));
+      const progress = easeOutCubic(clamp01(elapsed / (INTRO_TOTAL_MS * 0.92)));
       scanYRef.current = SCAN_START_Y + progress * (SCAN_END_Y - SCAN_START_Y);
     } else if (maxScanYRef.current < SCAN_END_Y - 0.01) {
       scanYRef.current +=
@@ -248,6 +249,7 @@ function AscentTower({ refs }: { refs: AscentRefs }) {
 
   useFrame(({ clock }) => {
     const scanY = refs.maxScanYRef.current;
+    const scanFrontY = refs.scanYRef.current;
     const climberY = refs.climberYRef.current;
     const time = clock.elapsedTime;
 
@@ -256,14 +258,27 @@ function AscentTower({ refs }: { refs: AscentRefs }) {
       const reveal = scanReveal(centerY, scanY, 0.9);
       const ignition = floorIgnition(index, climberY);
 
-      colorScratch.copy(DIM_COLOR).lerp(LIT_COLOR, ignition);
+      // Odradek-style flare: edges flash gold as the scan front passes.
+      const frontDelta = centerY - scanFrontY;
+      const flare = Math.exp(-(frontDelta * frontDelta) / 0.4);
+
+      colorScratch
+        .copy(DIM_COLOR)
+        .lerp(LIT_COLOR, ignition)
+        .lerp(FLARE_COLOR, flare * 0.75);
 
       if (handles.wire) {
-        handles.wire.opacity = reveal * (0.09 + 0.13 * ignition);
+        handles.wire.opacity = Math.min(
+          1,
+          reveal * (0.09 + 0.13 * ignition) + flare * 0.2
+        );
         handles.wire.color.copy(colorScratch);
       }
       if (handles.edge) {
-        handles.edge.opacity = reveal * (0.3 + 0.5 * ignition);
+        handles.edge.opacity = Math.min(
+          1,
+          reveal * (0.3 + 0.5 * ignition) + flare * 0.6
+        );
         handles.edge.color.copy(colorScratch);
       }
       if (handles.beaconMat) {
@@ -375,10 +390,10 @@ interface LimbSpec {
 }
 
 const LIMBS: LimbSpec[] = [
-  { key: "leftArm", shoulder: [-0.15, 0.15, 0], length: 0.3, thickness: 0.045, isArm: true, side: -1 },
-  { key: "rightArm", shoulder: [0.15, 0.15, 0], length: 0.3, thickness: 0.045, isArm: true, side: 1 },
-  { key: "leftLeg", shoulder: [-0.08, -0.18, 0], length: 0.36, thickness: 0.05, isArm: false, side: -1 },
-  { key: "rightLeg", shoulder: [0.08, -0.18, 0], length: 0.36, thickness: 0.05, isArm: false, side: 1 },
+  { key: "leftArm", shoulder: [-0.11, 0.15, 0], length: 0.26, thickness: 0.042, isArm: true, side: -1 },
+  { key: "rightArm", shoulder: [0.11, 0.15, 0], length: 0.26, thickness: 0.042, isArm: true, side: 1 },
+  { key: "leftLeg", shoulder: [-0.07, -0.18, 0], length: 0.32, thickness: 0.048, isArm: false, side: -1 },
+  { key: "rightLeg", shoulder: [0.07, -0.18, 0], length: 0.32, thickness: 0.048, isArm: false, side: 1 },
 ];
 
 function Climber({ refs }: { refs: AscentRefs }) {
@@ -413,19 +428,19 @@ function Climber({ refs }: { refs: AscentRefs }) {
 
       if (spec.isArm) {
         // Arms cycle between overhead reach and pull-down along the wall.
-        limb.rotation.x = -2.35 - reach * 0.55;
-        limb.rotation.z = spec.side * (0.28 - reach * 0.1);
+        limb.rotation.x = -2.5 - reach * 0.5;
+        limb.rotation.z = spec.side * (0.24 - reach * 0.08);
       } else {
         // Legs push: knee-up alternation against the face.
-        limb.rotation.x = -0.45 - reach * 0.5;
-        limb.rotation.z = spec.side * 0.14;
+        limb.rotation.x = -0.35 - reach * 0.45;
+        limb.rotation.z = spec.side * 0.08;
       }
     });
 
     materialRefs.current.forEach((material) => {
       if (material) material.opacity = reveal * 0.92;
     });
-    if (glowRef.current) glowRef.current.opacity = reveal * 0.14;
+    if (glowRef.current) glowRef.current.opacity = reveal * 0.1;
   });
 
   return (
@@ -478,7 +493,7 @@ function Climber({ refs }: { refs: AscentRefs }) {
           </group>
         ))}
         <mesh>
-          <sphereGeometry args={[0.42, 16, 16]} />
+          <sphereGeometry args={[0.34, 16, 16]} />
           <meshBasicMaterial
             ref={glowRef}
             color="#00f5ff"
@@ -498,6 +513,8 @@ function ScanPulse({ refs, phase }: { refs: AscentRefs; phase: IntroPhase }) {
   const ringMatRef = React.useRef<THREE.MeshBasicMaterial>(null);
   const bandRef = React.useRef<THREE.Mesh>(null);
   const bandMatRef = React.useRef<THREE.MeshBasicMaterial>(null);
+  const haloRef = React.useRef<THREE.Mesh>(null);
+  const haloMatRef = React.useRef<THREE.MeshBasicMaterial>(null);
 
   useFrame(() => {
     const scanY = refs.scanYRef.current;
@@ -525,7 +542,13 @@ function ScanPulse({ refs, phase }: { refs: AscentRefs; phase: IntroPhase }) {
     if (bandRef.current && bandMatRef.current) {
       bandRef.current.position.y = scanY;
       bandMatRef.current.opacity = introRunning
-        ? 0.5 * Math.sin(introProgress * Math.PI)
+        ? 0.85 * Math.sin(introProgress * Math.PI)
+        : 0;
+    }
+    if (haloRef.current && haloMatRef.current) {
+      haloRef.current.position.y = scanY;
+      haloMatRef.current.opacity = introRunning
+        ? 0.1 * Math.sin(introProgress * Math.PI)
         : 0;
     }
   });
@@ -549,10 +572,21 @@ function ScanPulse({ refs, phase }: { refs: AscentRefs; phase: IntroPhase }) {
         />
       </mesh>
       <mesh ref={bandRef} position={[0, SCAN_START_Y, 0]}>
-        <boxGeometry args={[5.6, 0.014, 5.6]} />
+        <boxGeometry args={[6.4, 0.016, 6.4]} />
         <meshBasicMaterial
           ref={bandMatRef}
-          color={LIT_COLOR}
+          color={FLARE_COLOR}
+          transparent
+          opacity={0}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh ref={haloRef} position={[0, SCAN_START_Y, 0]}>
+        <boxGeometry args={[6.4, 0.2, 6.4]} />
+        <meshBasicMaterial
+          ref={haloMatRef}
+          color={FLARE_COLOR}
           transparent
           opacity={0}
           blending={THREE.AdditiveBlending}

@@ -62,6 +62,7 @@ function ScanIntroOverlay() {
   return (
     <div
       role="presentation"
+      data-testid="scan-intro-overlay"
       onClick={skip}
       className={cn(
         "fixed inset-0 z-[60] cursor-pointer select-none font-mono transition-opacity",
@@ -103,7 +104,7 @@ function ScanIntroOverlay() {
         })}
       </div>
 
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-center sm:bottom-20">
+      <div className="absolute right-5 top-1/2 -translate-y-1/2 text-right sm:right-10">
         <div className="text-4xl font-bold tabular-nums text-[var(--neon-cyan)] [text-shadow:0_0_24px_rgba(0,255,255,0.45)] sm:text-5xl">
           {percent}
           <span className="text-xl sm:text-2xl">%</span>
@@ -111,6 +112,7 @@ function ScanIntroOverlay() {
         <div className="mt-2 text-[10px] uppercase tracking-[0.34em] text-white/40">
           chiral density
         </div>
+        <div className="mt-6 ml-auto h-px w-24 bg-gradient-to-l from-[var(--neon-cyan)]/60 to-transparent" />
       </div>
 
       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-white/35 sm:bottom-8">

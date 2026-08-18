@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { MotionConfig } from "framer-motion";
 import { WebGLBackground } from "@/components/visuals/webgl-background";
 import { ScanIntroOverlay } from "@/components/visuals/scan-intro-overlay";
 import { IntroProvider, useIntro } from "@/components/motion/intro-context";
@@ -28,15 +29,17 @@ function IntroGatedContent({ children }: { children: React.ReactNode }) {
 function AnimatedPageShell({ children }: AnimatedPageShellProps) {
   return (
     <IntroProvider>
-      <main className="relative min-h-screen overflow-x-hidden bg-[var(--cyber-dark)] text-foreground">
+      <MotionConfig reducedMotion="user">
+        <main className="relative min-h-screen overflow-x-hidden bg-[var(--cyber-dark)] text-foreground">
         <WebGLBackground />
         <div
           className="fixed inset-0 z-[1] pointer-events-none bg-[radial-gradient(ellipse_at_top,transparent_0%,rgba(5,5,8,0.12)_42%,rgba(5,5,8,0.72)_100%)]"
           aria-hidden="true"
         />
-        <IntroGatedContent>{children}</IntroGatedContent>
-        <ScanIntroOverlay />
-      </main>
+          <IntroGatedContent>{children}</IntroGatedContent>
+          <ScanIntroOverlay />
+        </main>
+      </MotionConfig>
     </IntroProvider>
   );
 }
