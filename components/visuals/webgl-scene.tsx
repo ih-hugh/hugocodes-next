@@ -660,6 +660,155 @@ function CircuitPlane({ refs }: { refs: AscentRefs }) {
   );
 }
 
+const PARTICLE_COUNT = 600;
+const PARTICLE_PLANE_Z = 2.5;
+const PARTICLE_BASE = new THREE.Color("#54f7ff");
+const PARTICLE_ACCENT = new THREE.Color("#b388ff");
+
+// Module-level pools: this is a singleton background scene, and the React
+// Compiler lint forbids mutating hook-produced values inside useFrame.
+function createParticleBuffers() {
+  const positions = new Float32Array(PARTICLE_COUNT * 3);
+  // Park every particle far away until it is spawned.
+  for (let index = 0; index < PARTICLE_COUNT; index++) {
+    positions[index * 3 + 1] = -60;
+  }
+
+  return {
+    positions,
+    colors: new Float32Array(PARTICLE_COUNT * 3),
+    velocities: new Float32Array(PARTICLE_COUNT * 3),
+    life: new Float32Array(PARTICLE_COUNT),
+    maxLife: new Float32Array(PARTICLE_COUNT),
+  };
+}
+
+const particleBuffers = createParticleBuffers();
+const particleScratch = {
+  origin: new THREE.Vector3(),
+  direction: new THREE.Vector3(),
+  ndc: new THREE.Vector3(),
+  world: new THREE.Vector3(),
+  color: new THREE.Color(),
+};
+
+function PointerParticles({ refs }: { refs: AscentRefs }) {
+  const geometryRef = React.useRef<THREE.BufferGeometry>(null);
+  const lastPointerRef = React.useRef<{ x: number; y: number } | null>(null);
+  const cursorRef = React.useRef(0);
+
+  useFrame(({ camera }, delta) => {
+    const geometry = geometryRef.current;
+    if (!geometry) return;
+
+    const pointer = refs.pointerRef.current;
+    const last = lastPointerRef.current;
+    const scratch = particleScratch;
+    const { positions, colors, velocities, life, maxLife } = particleBuffers;
+
+    // Unproject the pointer onto the fixed world plane z = PARTICLE_PLANE_Z.
+    scratch.ndc.set(pointer.x, pointer.y, 0.5).unproject(camera);
+    scratch.origin.copy(camera.position);
+    scratch.direction.copy(scratch.ndc).sub(scratch.origin).normalize();
+    const travel =
+      Math.abs(scratch.direction.z) > 1e-4
+        ? (PARTICLE_PLANE_Z - scratch.origin.z) / scratch.direction.z
+        : -1;
+
+    if (last && travel > 0) {
+      const moveX = pointer.x - last.x;
+      const moveY = pointer.y - last.y;
+      const speed = Math.hypot(moveX, moveY);
+
+      if (speed > 0.0004) {
+        scratch.world
+          .copy(scratch.origin)
+          .addScaledVector(scratch.direction, travel);
+        const spawnCount = Math.min(12, 3 + Math.floor(speed * 260));
+
+        for (let spawn = 0; spawn < spawnCount; spawn++) {
+          const index = cursorRef.current;
+          cursorRef.current = (cursorRef.current + 1) % PARTICLE_COUNT;
+
+          positions[index * 3] = scratch.world.x + (Math.random() - 0.5) * 0.12;
+          positions[index * 3 + 1] =
+            scratch.world.y + (Math.random() - 0.5) * 0.12;
+          positions[index * 3 + 2] =
+            scratch.world.z + (Math.random() - 0.5) * 0.12;
+
+          velocities[index * 3] =
+            moveX * 6 + (Math.random() - 0.5) * 0.5;
+          velocities[index * 3 + 1] =
+            moveY * 6 + (Math.random() - 0.5) * 0.5 + 0.18;
+          velocities[index * 3 + 2] = (Math.random() - 0.5) * 0.4;
+
+          const lifetime = 1.2 + Math.random() * 0.8;
+          life[index] = lifetime;
+          maxLife[index] = lifetime;
+        }
+      }
+    }
+    lastPointerRef.current = { x: pointer.x, y: pointer.y };
+
+    for (let index = 0; index < PARTICLE_COUNT; index++) {
+      if (life[index] <= 0) continue;
+
+      life[index] -= delta;
+      if (life[index] <= 0) {
+        positions[index * 3 + 1] = -60;
+        colors[index * 3] = 0;
+        colors[index * 3 + 1] = 0;
+        colors[index * 3 + 2] = 0;
+        continue;
+      }
+
+      const drag = Math.pow(0.32, delta);
+      velocities[index * 3] *= drag;
+      velocities[index * 3 + 1] = velocities[index * 3 + 1] * drag + 0.25 * delta;
+      velocities[index * 3 + 2] *= drag;
+
+      positions[index * 3] += velocities[index * 3] * delta;
+      positions[index * 3 + 1] += velocities[index * 3 + 1] * delta;
+      positions[index * 3 + 2] += velocities[index * 3 + 2] * delta;
+
+      // Additive blending: fading toward black fades the particle out.
+      const strength = life[index] / maxLife[index];
+      scratch.color
+        .copy(index % 5 === 0 ? PARTICLE_ACCENT : PARTICLE_BASE)
+        .multiplyScalar(strength * strength);
+      colors[index * 3] = scratch.color.r;
+      colors[index * 3 + 1] = scratch.color.g;
+      colors[index * 3 + 2] = scratch.color.b;
+    }
+
+    geometry.attributes.position.needsUpdate = true;
+    geometry.attributes.color.needsUpdate = true;
+  });
+
+  return (
+    <points frustumCulled={false}>
+      <bufferGeometry ref={geometryRef}>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[particleBuffers.positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[particleBuffers.colors, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.055}
+        sizeAttenuation
+        transparent
+        vertexColors
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
 function SceneContent({ phase }: { phase: IntroPhase }) {
   const refs = useAscentRefs();
 
@@ -671,6 +820,7 @@ function SceneContent({ phase }: { phase: IntroPhase }) {
       <AscentTower refs={refs} />
       <Climber refs={refs} />
       <ScanPulse refs={refs} phase={phase} />
+      <PointerParticles refs={refs} />
       <NeuralField refs={refs} />
       <CircuitPlane refs={refs} />
     </>
