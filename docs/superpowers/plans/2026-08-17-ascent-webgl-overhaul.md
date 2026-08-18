@@ -43,11 +43,11 @@ export const SCANNING_MS = 2400;
 export const REVEALING_MS = 800;
 ```
 
-- [ ] **Step 1: Write failing tests** covering: `climberYFor(0)` = TOWER_BASE_Y; `climberYFor(1)` = top floor center; clamping outside [0,1]; `floorIgnition` is 0 below floor bottom, 1 at/above floor center, monotonic between; `scanReveal` 0 far above scanY, 1 well below, smooth between; `climbPose` contralateral (leftArm ≈ rightLeg, phase-opposed to rightArm/leftLeg); `introPhaseAt(0)`="scanning", `(2500)`="revealing", `(3300)`="live".
-- [ ] **Step 2: Run `pnpm test` — verify FAIL** (module not found).
-- [ ] **Step 3: Implement** with plain trig/lerp math, no three imports.
-- [ ] **Step 4: Run `pnpm test` — verify PASS.**
-- [ ] **Step 5: Commit** `feat(ascent): add ascent math library`.
+- [x] **Step 1: Write failing tests** covering: `climberYFor(0)` = TOWER_BASE_Y; `climberYFor(1)` = top floor center; clamping outside [0,1]; `floorIgnition` is 0 below floor bottom, 1 at/above floor center, monotonic between; `scanReveal` 0 far above scanY, 1 well below, smooth between; `climbPose` contralateral (leftArm ≈ rightLeg, phase-opposed to rightArm/leftLeg); `introPhaseAt(0)`="scanning", `(2500)`="revealing", `(3300)`="live".
+- [x] **Step 2: Run `pnpm test` — verify FAIL** (module not found).
+- [x] **Step 3: Implement** with plain trig/lerp math, no three imports.
+- [x] **Step 4: Run `pnpm test` — verify PASS.**
+- [x] **Step 5: Commit** `feat(ascent): add ascent math library`.
 
 ### Task 2: Intro phase machine + HUD overlay + shell wiring
 
@@ -68,9 +68,9 @@ Behavior:
 - Overlay: fixed z-60, translucent dark tint (scene visible beneath), corner brackets, sequential monospace HUD lines ("ODRADEK ARRAY ONLINE" → "SCANNING STRUCTURE" → "MAPPING 7 FLOORS // 7 SHIPPED" → "CONNECTION ESTABLISHED"), percent ticker from elapsed time, "CLICK OR ESC TO SKIP" hint. Fades out over ~700ms at `live`, then unmounts.
 - Shell: `IntroProvider` wraps everything; children wrapper fades from `opacity-0` to visible on `introDone`.
 
-- [ ] **Step 1: Implement provider + overlay + wiring.**
-- [ ] **Step 2: `pnpm lint && pnpm test` green; manual smoke via dev server.**
-- [ ] **Step 3: Commit** `feat(intro): scan intro phase machine and HUD overlay`.
+- [x] **Step 1: Implement provider + overlay + wiring.**
+- [x] **Step 2: `pnpm lint && pnpm test` green; manual smoke via dev server.**
+- [x] **Step 3: Commit** `feat(intro): scan intro phase machine and HUD overlay`.
 
 ### Task 3: Scene rework — orbit rig, tower, climber, scan pulse
 
@@ -87,9 +87,9 @@ Component contracts:
 - `ScanPulse`: flat ground ring expanding during scanning + thin rising additive band at `scanY`; both fade when live; ambient pulse reuses the ring at low opacity.
 - Keep `NeuralField` + `CircuitPlane`, fading in with scan progress. Keep fog.
 
-- [ ] **Step 1: Implement scene rework.**
-- [ ] **Step 2: Dev-server visual check + console clean.**
-- [ ] **Step 3: Commit** `feat(scene): ascent tower, climber, orbit rig, scan pulse`.
+- [x] **Step 1: Implement scene rework.**
+- [x] **Step 2: Dev-server visual check + console clean.**
+- [x] **Step 3: Commit** `feat(scene): ascent tower, climber, orbit rig, scan pulse`.
 
 ### Task 4: Pointer particles
 
@@ -98,8 +98,8 @@ Component contracts:
 
 Contract: 600-particle pool; spawn 4–12/frame at pointer unprojected onto world plane `z = 2.5` when pointer moves, velocity from pointer delta + jitter + upward drift; per-frame integrate (drag 0.96, buoyancy), life 1.2–2s; **fade via vertexColors→black under `AdditiveBlending`** (no shader needed); dead particles recycled from a free list; `pointsMaterial` size 0.06, sizeAttenuation, depthWrite false.
 
-- [ ] **Step 1: Implement + visual check (trail visible, no GC churn — typed arrays only).**
-- [ ] **Step 2: Commit** `feat(scene): pointer particle trail`.
+- [x] **Step 1: Implement + visual check (trail visible, no GC churn — typed arrays only).**
+- [x] **Step 2: Commit** `feat(scene): pointer particle trail`.
 
 ### Task 5: Hero gating + terminal panel tilt
 
@@ -108,16 +108,16 @@ Contract: 600-particle pool; spawn 4–12/frame at pointer unprojected onto worl
 
 Changes: entrance `animate={introDone ? "visible" : "hidden"}`; typing-effect timer starts on `introDone`; `TerminalPanel` wrapper gets pointer-tilt (framer `useMotionValue`+`useSpring`, rotateX/rotateY max ±6°, `transformPerspective: 1000`, reset on leave).
 
-- [ ] **Step 1: Implement.**
-- [ ] **Step 2: `pnpm lint && pnpm test` green.**
-- [ ] **Step 3: Commit** `feat(hero): intro-gated entrance and terminal tilt`.
+- [x] **Step 1: Implement.**
+- [x] **Step 2: `pnpm lint && pnpm test` green.**
+- [x] **Step 3: Commit** `feat(hero): intro-gated entrance and terminal tilt`.
 
 ### Task 6: Self-verification loop
 
-- [ ] `pnpm lint`, `pnpm test`, `pnpm build` all green.
-- [ ] Dev server + headless browser: screenshots at intro mid-scan, post-intro hero, 50% scroll, 100% scroll; assert zero console errors; assert WebGL canvas non-black (luma check); verify skip path (click during intro), reload-in-session path (no intro), and reduced-motion path (fallback background, no intro).
-- [ ] Iterate on visual quality from screenshots until composition, readability, and pacing are right (multiple rounds expected).
-- [ ] Final commit + update plan checkboxes.
+- [x] `pnpm lint`, `pnpm test`, `pnpm build` all green.
+- [x] Dev server + headless browser: screenshots at intro mid-scan, post-intro hero, 50% scroll, 100% scroll; assert zero console errors; assert WebGL canvas non-black (luma check); verify skip path (click during intro), reload-in-session path (no intro), and reduced-motion path (fallback background, no intro).
+- [x] Iterate on visual quality from screenshots until composition, readability, and pacing are right (multiple rounds expected).
+- [x] Final commit + update plan checkboxes.
 
 ## Self-Review Notes
 
