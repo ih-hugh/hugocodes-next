@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { GlitchText } from "@/components/ui/glitch-text";
 import { ScanLines } from "@/components/ui/scan-lines";
 import { TypingEffect } from "@/components/ui/typing-effect";
+import { useIntro } from "@/components/motion/intro-context";
 import { personalInfo } from "@/lib/resume-data";
 
 const RESUME_PDF_URL =
@@ -130,10 +131,35 @@ function HeroStat({ value, label }: { value: string; label: string }) {
 }
 
 function TerminalPanel() {
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 140, damping: 18 });
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 140, damping: 18 });
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
+    const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+    rotateY.set(offsetX * 12);
+    rotateX.set(-offsetY * 12);
+  };
+
+  const handlePointerLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
   return (
-    <motion.div variants={itemVariants} className="relative hidden lg:block">
+    <motion.div
+      variants={itemVariants}
+      className="relative hidden lg:block"
+      style={{ perspective: 1000 }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
       <div className="absolute -inset-8 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--neon-cyan)_22%,transparent),transparent_64%)] blur-3xl" />
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[rgba(5,5,8,0.72)] p-5 shadow-[0_0_60px_rgba(0,255,255,0.08)] backdrop-blur-2xl">
+      <motion.div
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="relative overflow-hidden rounded-3xl border border-white/10 bg-[rgba(5,5,8,0.72)] p-5 shadow-[0_0_60px_rgba(0,255,255,0.08)] backdrop-blur-2xl"
+      >
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--neon-cyan)] to-transparent opacity-70" />
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-2">
@@ -193,21 +219,24 @@ function TerminalPanel() {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
 
 function Hero() {
+  const { introDone } = useIntro();
   const [showTypingEffect, setShowTypingEffect] = React.useState(false);
 
   React.useEffect(() => {
+    if (!introDone) return;
+
     const timer = setTimeout(() => {
       setShowTypingEffect(true);
     }, 850);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [introDone]);
 
   return (
     <section
@@ -228,7 +257,7 @@ function Hero() {
         className="relative z-20 mx-auto grid min-h-[calc(100vh-10rem)] max-w-7xl items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]"
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
+        animate={introDone ? "visible" : "hidden"}
       >
         <div className="max-w-4xl">
           <motion.div
@@ -303,7 +332,7 @@ function Hero() {
       <motion.div
         variants={scrollIndicatorVariants}
         initial="hidden"
-        animate="visible"
+        animate={introDone ? "visible" : "hidden"}
         className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2"
       >
         <motion.button
