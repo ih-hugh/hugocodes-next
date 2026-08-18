@@ -10,10 +10,12 @@ import {
   clamp01,
   climbPose,
   climberYFor,
+  dancePose,
   floorCenterY,
   floorIgnition,
   introPhaseAt,
   scanReveal,
+  summitBlend,
 } from "./ascent";
 
 describe("clamp01", () => {
@@ -107,6 +109,46 @@ describe("climbPose", () => {
     for (const t of [0, 0.5, 1.4, 3.9, 12.2]) {
       const pose = climbPose(t);
       for (const value of [pose.leftArm, pose.rightArm, pose.leftLeg, pose.rightLeg, pose.bob]) {
+        expect(Math.abs(value)).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+});
+
+describe("summitBlend", () => {
+  it("is 0 through the climb and 1 at the top", () => {
+    expect(summitBlend(0)).toBe(0);
+    expect(summitBlend(0.88)).toBe(0);
+    expect(summitBlend(0.975)).toBe(1);
+    expect(summitBlend(1)).toBe(1);
+  });
+
+  it("ramps smoothly and monotonically in the blend zone", () => {
+    const low = summitBlend(0.91);
+    const mid = summitBlend(0.93);
+    const high = summitBlend(0.96);
+    expect(low).toBeGreaterThan(0);
+    expect(mid).toBeGreaterThan(low);
+    expect(high).toBeGreaterThan(mid);
+    expect(high).toBeLessThan(1);
+  });
+});
+
+describe("dancePose", () => {
+  it("alternates the arm pumps and leg kicks", () => {
+    const pose = dancePose(0.13);
+    expect(pose.leftArm).toBeCloseTo(-pose.rightArm);
+    expect(pose.leftLeg * pose.rightLeg).toBeCloseTo(0);
+  });
+
+  it("keeps bounce and kicks in [0,1] and everything bounded", () => {
+    for (const t of [0, 0.2, 0.77, 1.5, 4.31]) {
+      const pose = dancePose(t);
+      expect(pose.bounce).toBeGreaterThanOrEqual(0);
+      expect(pose.bounce).toBeLessThanOrEqual(1);
+      expect(pose.leftLeg).toBeGreaterThanOrEqual(0);
+      expect(pose.rightLeg).toBeGreaterThanOrEqual(0);
+      for (const value of [pose.leftArm, pose.rightArm, pose.leftLeg, pose.rightLeg, pose.rock]) {
         expect(Math.abs(value)).toBeLessThanOrEqual(1);
       }
     }

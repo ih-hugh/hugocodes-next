@@ -51,6 +51,38 @@ export function climbPose(cycleTime: number): ClimbPose {
   };
 }
 
+export const SUMMIT_BLEND_START = 0.88;
+export const SUMMIT_BLEND_END = 0.975;
+
+/** 0 while climbing, 1 once the climber tops out; smoothstep in between. */
+export function summitBlend(climbProgress: number): number {
+  const t = clamp01(
+    (climbProgress - SUMMIT_BLEND_START) / (SUMMIT_BLEND_END - SUMMIT_BLEND_START)
+  );
+  return t * t * (3 - 2 * t);
+}
+
+export interface DancePose {
+  leftArm: number;
+  rightArm: number;
+  leftLeg: number;
+  rightLeg: number;
+  bounce: number;
+  rock: number;
+}
+
+export function dancePose(cycleTime: number): DancePose {
+  const beat = cycleTime * Math.PI * 2;
+  return {
+    leftArm: Math.sin(beat),
+    rightArm: -Math.sin(beat),
+    leftLeg: Math.max(0, Math.sin(beat + Math.PI)),
+    rightLeg: Math.max(0, Math.sin(beat)),
+    bounce: Math.abs(Math.sin(beat)),
+    rock: Math.sin(beat * 0.5),
+  };
+}
+
 export function introPhaseAt(elapsedMs: number): IntroPhase {
   if (elapsedMs < SCANNING_MS) return "scanning";
   if (elapsedMs < INTRO_TOTAL_MS) return "revealing";

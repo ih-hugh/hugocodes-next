@@ -14,9 +14,11 @@ import {
   clamp01,
   climbPose,
   climberYFor,
+  dancePose,
   floorCenterY,
   floorIgnition,
   scanReveal,
+  summitBlend,
 } from "@/lib/ascent/ascent";
 
 interface WebGLSceneProps {
@@ -27,6 +29,11 @@ const SCAN_START_Y = TOWER_BASE_Y - 0.8;
 const SCAN_END_Y = TOWER_TOP_Y + 1.4;
 const CLIMB_FACE_Z = 1.16;
 const CLIMB_X = 0.42;
+// Summit: the climber tops out onto the roof of the last floor and dances.
+const ROOF_Y = floorCenterY(FLOOR_COUNT - 1) + (FLOOR_HEIGHT * 0.88) / 2;
+const CLIMB_SPAN = floorCenterY(FLOOR_COUNT - 1) - TOWER_BASE_Y;
+const SUMMIT_X = 0.32;
+const SUMMIT_Z = 0.2;
 
 const FLOOR_WIDTHS = [2.3, 2.0, 2.15, 1.8, 1.9, 1.6, 1.45] as const;
 const FLOOR_JITTER = [
@@ -51,6 +58,10 @@ function seededRandom(seed: number) {
 
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
+}
+
+function lerpN(a: number, b: number, t: number) {
+  return a + (b - a) * t;
 }
 
 interface AscentRefs {
@@ -189,7 +200,10 @@ function CameraRig({ refs, phase }: { refs: AscentRefs; phase: IntroPhase }) {
       ? introRadiusRef.current
       : 8.2 - scroll * 1.2;
 
-    const centerY = climberY * 0.55 + 0.35;
+    const centerY =
+      climberY * 0.55 +
+      0.35 +
+      summitBlend((climberY - TOWER_BASE_Y) / CLIMB_SPAN) * 0.35;
     const targetX = Math.sin(azimuth) * radius * Math.cos(elevation);
     const targetZ = Math.cos(azimuth) * radius * Math.cos(elevation);
     const targetY = centerY + Math.sin(elevation) * radius;
@@ -411,30 +425,53 @@ function Climber({ refs }: { refs: AscentRefs }) {
     const activity = refs.activityRef.current;
     const amplitude = 0.3 + 0.7 * activity;
     const pose = climbPose(time * 0.55);
+    const dance = dancePose(time * 0.8);
+    // Blend from eased climber height so the top-out transition is smooth.
+    const summit = summitBlend((climberY - TOWER_BASE_Y) / CLIMB_SPAN);
     const reveal = scanReveal(climberY + 0.4, refs.maxScanYRef.current, 0.8);
 
+    const climbYPos = climberY + 0.55 + pose.bob * 0.06 * amplitude;
+    const standYPos = ROOF_Y + 0.5 + dance.bounce * 0.09;
     groupRef.current.position.set(
-      CLIMB_X + Math.sin(time * 0.4) * 0.045,
-      climberY + 0.55 + pose.bob * 0.06 * amplitude,
-      CLIMB_FACE_Z
+      lerpN(CLIMB_X + Math.sin(time * 0.4) * 0.045, SUMMIT_X, summit),
+      lerpN(climbYPos, standYPos, summit),
+      lerpN(CLIMB_FACE_Z, SUMMIT_Z, summit)
     );
-    groupRef.current.rotation.z = pose.leftArm * 0.07 * amplitude;
+    // Spin from facing the wall to facing the camera while topping out.
+    groupRef.current.rotation.y = Math.PI * (1 + summit);
+    groupRef.current.rotation.z =
+      pose.leftArm * 0.07 * amplitude * (1 - summit) +
+      dance.rock * 0.12 * summit;
 
     const limbPose = [pose.leftArm, pose.rightArm, pose.leftLeg, pose.rightLeg];
+    const dancePump = [dance.leftArm, dance.rightArm, dance.leftLeg, dance.rightLeg];
     limbRefs.current.forEach((limb, index) => {
       if (!limb) return;
       const spec = LIMBS[index];
       const reach = limbPose[index] * amplitude;
+      const pump = dancePump[index];
 
+      let climbRotX: number;
+      let climbRotZ: number;
+      let danceRotX: number;
+      let danceRotZ: number;
       if (spec.isArm) {
-        // Arms cycle between overhead reach and pull-down along the wall.
-        limb.rotation.x = -2.5 - reach * 0.5;
-        limb.rotation.z = spec.side * (0.24 - reach * 0.08);
+        // Climb: arms cycle between overhead reach and pull-down along the wall.
+        climbRotX = -2.5 - reach * 0.5;
+        climbRotZ = spec.side * (0.24 - reach * 0.08);
+        // Dance: arms overhead in a V, pumping to the beat.
+        danceRotX = -2.85 - pump * 0.3;
+        danceRotZ = spec.side * (0.5 + pump * 0.22);
       } else {
-        // Legs push: knee-up alternation against the face.
-        limb.rotation.x = -0.35 - reach * 0.45;
-        limb.rotation.z = spec.side * 0.08;
+        // Climb: legs push, knee-up alternation against the face.
+        climbRotX = -0.35 - reach * 0.45;
+        climbRotZ = spec.side * 0.08;
+        // Dance: alternating knee raises on the roof.
+        danceRotX = -pump * 0.55;
+        danceRotZ = spec.side * 0.16;
       }
+      limb.rotation.x = lerpN(climbRotX, danceRotX, summit);
+      limb.rotation.z = lerpN(climbRotZ, danceRotZ, summit);
     });
 
     materialRefs.current.forEach((material) => {
