@@ -170,6 +170,24 @@
   }
 }
 
+/* Intro scan sweep rising up the viewport */
+@keyframes intro-sweep {
+  0% {
+    top: 96%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 2%;
+    opacity: 0;
+  }
+}
+
 /* Scan line moving down screen */
 @keyframes scan-line {
   0% {
